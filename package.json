@@ -1,0 +1,8 @@
+{
+  "name": "big-trip",
+  "version": "1.0.0",
+  "description": "Modern service for real travelers.",
+  "author": "umnyash",
+  "license": "MIT",
+  "private": true
+}
