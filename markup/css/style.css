@@ -39,3 +39,22 @@
   font-display: swap;
   src: url("../fonts/montserrat-v31-latin-latinext-800.woff2") format("woff2");
 }
+
+/* Global */
+
+:root {
+  --text-primary-color: #000000;
+  --text-primary-color-soft: #424242;
+  --text-secondary-color: #b4b4b4;
+  --text-secondary-color-strong: #999999;
+  --text-additional-color: #ffffff;
+  --background-primary-color: #f2f2f2;
+  --background-primary-color-alter: #ebebeb;
+  --background-secondary-color: #ffffff;
+  --background-secondary-color-60: rgba(255, 255, 255, 0.6);
+  --brand-color: #0d8ae4;
+  --brand-color-80: rgba(13, 138, 228, 0.8);
+  --brand-color-60: rgba(13, 138, 228, 0.6);
+  --accent-color: #ffd054;
+  --accent-color-60: rgba(255, 208, 84, 0.6);
+}
