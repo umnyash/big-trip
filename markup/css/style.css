@@ -58,3 +58,13 @@
   --accent-color: #ffd054;
   --accent-color-60: rgba(255, 208, 84, 0.6);
 }
+
+/* page */
+
+.page__body {
+  min-width: 1200px;
+  margin: 0;
+  font: 400 15px/18px "Montserrat", "Arial", sans-serif;
+  color: var(--text-primary-color);
+  background: var(--background-primary-color);
+}
