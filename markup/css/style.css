@@ -59,6 +59,21 @@
   --accent-color-60: rgba(255, 208, 84, 0.6);
 }
 
+/* Helpers */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 /* page */
 
 .page__body {
