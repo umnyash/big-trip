@@ -74,6 +74,58 @@
   overflow: hidden;
 }
 
+/* favorite-button */
+
+.favorite-button {
+  position: relative;
+  display: inline-grid;
+  padding: 0;
+  border: none;
+  color: var(--background-primary-color-alter);
+  background: none;
+  transition: color 200ms linear;
+}
+
+.favorite-button[aria-pressed="true"] {
+  color: var(--accent-color);
+}
+
+.favorite-button:enabled {
+  cursor: pointer;
+}
+
+.favorite-button:enabled:hover {
+  color: var(--accent-color-60);
+}
+
+.favorite-button:enabled:active {
+  color: var(--accent-color);
+}
+
+.favorite-button:enabled[aria-pressed="true"]:active {
+  color: var(--background-primary-color-alter);
+}
+
+.favorite-button::before {
+  /* Increases the clickable area to 40 pixels. */
+  content: "";
+  position: absolute;
+  inset: calc((100% - 40px) / 2);
+}
+
+.favorite-button::after {
+  content: "";
+  grid-area: 1 / 1 / 2 / 2;
+  width: 28px;
+  height: 28px;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  background: currentColor;
+  mask: url("../img/icons/star.svg") no-repeat 50% 50% / contain;
+}
+
 /* page */
 
 .page__body {
