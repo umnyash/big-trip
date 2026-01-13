@@ -80,6 +80,76 @@
 
 /* #endregion */
 
+/* #region button */
+
+.button {
+  display: inline-block;
+  border: none;
+  font-family: inherit;
+  font-weight: 500;
+  transition: opacity 200ms linear;
+}
+
+.button:enabled {
+  cursor: pointer;
+}
+
+.button:enabled:hover {
+  opacity: 0.8;
+}
+
+.button:enabled:active {
+  opacity: 0.6;
+}
+
+.button:disabled {
+  opacity: 0.45;
+}
+
+.button[data-text-icon]::before {
+  content: attr(data-text-icon) "\000A0";
+}
+
+.button--simple {
+  padding: 0;
+  color: var(--brand-color);
+  background: none;
+}
+
+.button--primary {
+  border-radius: 1000px;
+  color: var(--text-additional-color);
+  background-color: var(--brand-color);
+}
+
+.button--accent {
+  border-radius: 1000px;
+  color: var(--text-primary-color-soft);
+  background-color: var(--accent-color);
+}
+
+/* sizes */
+
+.button--size_s {
+  font-size: 17px;
+  line-height: 21px;
+}
+
+.button--size_s.button--primary {
+  padding: 4px 16px 5px;
+}
+
+.button--size_l {
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.button--size_l.button--accent {
+  padding: 17px 29px 16px;
+}
+
+/* #endregion */
+
 /* #region favorite-button */
 
 .favorite-button {
