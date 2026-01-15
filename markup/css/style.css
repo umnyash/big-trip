@@ -150,6 +150,124 @@
 
 /* #endregion */
 
+/* #region checker */
+
+.checker {
+  display: inline-block;
+}
+
+.checker__label {
+  display: block;
+}
+
+.checker__control[type="checkbox"]:enabled + .checker__label {
+  cursor: pointer;
+}
+
+.checker__control[type="radio"]:enabled:not(:checked) + .checker__label {
+  cursor: pointer;
+}
+
+/* accent */
+
+.checker--accent .checker__label {
+  padding: 22px 30px 21px;
+  border-radius: 1000px;
+  font-size: 17px;
+  line-height: 21px;
+  background: var(--background-primary-color);
+  transition: background-color 200ms linear;
+}
+
+.checker--accent:hover .checker__control:enabled:not(:checked) + .checker__label {
+  background-color: var(--brand-color-60);
+}
+
+.checker--accent .checker__control:checked + .checker__label {
+  background-color: var(--brand-color);
+}
+
+/* emphasis */
+
+.checker--emphasis .checker__label {
+  display: flex;
+  padding: 7px 16px 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 1000px;
+  column-gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-secondary-color);
+  opacity: 0.6;
+  transition: color 200ms linear;
+}
+
+.checker--emphasis .checker__label::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  transform: scale(0);
+  transition: transform 200ms ease-in;
+}
+
+.checker--emphasis .checker__control:enabled + .checker__label {
+  opacity: 1;
+}
+
+.checker--emphasis:hover .checker__control:enabled:not(:checked) + .checker__label {
+  color: var(--text-secondary-color-strong);
+}
+
+.checker--emphasis .checker__control:checked + .checker__label {
+  color: var(--text-color);
+  border-color: currentColor;
+}
+
+.checker--emphasis .checker__control:checked + .checker__label::before {
+  transform: scale(1);
+  transition-timing-function: ease-out;
+}
+
+/* soft */
+
+.checker--soft .checker__label {
+  position: relative;
+  display: block;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  transition: opacity 200ms linear;
+}
+
+.checker--soft .checker__label::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+.checker--soft .checker__control:enabled + .checker__label {
+  opacity: 0.6;
+}
+
+.checker--soft:hover .checker__control:enabled:not(:checked) + .checker__label {
+  opacity: 0.8;
+}
+
+.checker--soft .checker__control:checked + .checker__label {
+  opacity: 1;
+}
+
+/* #endregion */
+
 /* #region favorite-button */
 
 .favorite-button {

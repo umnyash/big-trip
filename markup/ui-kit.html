@@ -29,6 +29,36 @@
     <button class="button button--accent button--size_l" data-text-icon="+" disabled>New event</button>
   </section>
   <section>
+    <h2>Radio</h2>
+    Soft
+    <label class="checker checker--soft">
+      <input class="checker__control visually-hidden" name="checker-radio" type="radio">
+      <span class="checker__label">Soft</span>
+    </label>
+    Soft (disabled)
+    <label class="checker checker--soft">
+      <input class="checker__control visually-hidden" name="checker-radio" type="radio" disabled>
+      <span class="checker__label">Soft</span>
+    </label>
+    Emphasis
+    <label class="checker checker--emphasis">
+      <input class="checker__control visually-hidden" name="checker-radio" type="radio">
+      <span class="checker__label">Emphasis</span>
+    </label>
+    Emphasis (fake)
+    <span class="checker checker--emphasis">
+      <span class="checker__label">Emphasis</span>
+    </span>
+  </section>
+  <section style="background-color: var(--background-secondary-color);">
+    <h2>Checkbox</h2>
+    Accent
+    <label class="checker checker--accent">
+      <input class="checker__control visually-hidden" name="checker-checkboxes" type="checkbox">
+      <span class="checker__label">Accent</span>
+    </label>
+  </section>
+  <section>
     <h2>Favorite Button</h2>
     Default
     <button class="favorite-button" type="button" aria-pressed="false">
