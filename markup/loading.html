@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="page">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Big Trip</title>
+  <link rel="icon" href="favicon.ico">
+  <meta name="description" content="«Big Trip» — is a modern service for real travelers, helping them plan their itinerary in detail, calculate their travel costs, and get information about attractions.">
+  <meta name="keywords" content="Big Trip, travel service, trip planner">
+</head>
+
+<body class="page__body">
+  <h1 class="visually-hidden">«Big Trip» &mdash; travel planner, trip budget calculator, attractions guide.</h1>
+  <div class="trip">
+    <header class="trip__header trip-header">
+      <img class="trip-header__logo" src="img/logo.png" width="42" height="42" alt="Логотип в виде каменистой горы.">
+      <form class="trip-header__filter trip-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="everything" disabled>
+          <span class="checker__label">Everything</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="future" disabled>
+          <span class="checker__label">Future</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="present" disabled>
+          <span class="checker__label">Present</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="past" disabled>
+          <span class="checker__label">Past</span>
+        </label>
+      </form>
+      <button class="trip-header__add-button button button--accent button--size_l" type="button" data-text-icon="+" disabled>New event</button>
+    </header>
+    <p class="trip__message">Loading<span class="animated-ellipsis"><span>...</span></span></p>
+  </div>
+</body>
+
+</html>

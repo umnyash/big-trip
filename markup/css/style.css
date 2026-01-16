@@ -80,6 +80,26 @@
 
 /* #endregion */
 
+/* #region animated-ellipsis */
+
+.animated-ellipsis {
+  display: inline-grid;
+  justify-items: start;
+}
+
+.animated-ellipsis span {
+  grid-area: 1 / 1 / 2 / 2;
+  color: transparent;
+}
+
+.animated-ellipsis::after {
+  content: "";
+  grid-area: 1 / 1 / 2 / 2;
+  animation: ellipsis 1000ms linear infinite;
+}
+
+/* #endregion */
+
 /* #region button */
 
 .button {
@@ -346,8 +366,22 @@
   align-content: start;
 }
 
+.trip:has(.trip__message) {
+  grid-template-rows: auto 1fr;
+}
+
 .trip__header {
   grid-column: 1 / -1;
+}
+
+.trip__message {
+  grid-column: 2 / -2;
+  align-self: center;
+  text-align: center;
+  font-size: 44px;
+  line-height: 60px;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 /* #endregion */
@@ -428,3 +462,22 @@
 }
 
 /* #endregion */
+
+/* #region animations */
+
+@keyframes ellipsis {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+}
+
+/* #endregion*/
