@@ -333,3 +333,17 @@
 }
 
 /* #endregion */
+
+/* #region trip */
+
+.trip {
+  --trip-grid-column-gap: 18px;
+
+  display: grid;
+  min-height: 100dvh;
+  grid-template-columns: 1fr 82px 42px 295px 225px 37px 32px 38px 181px 28px 58px 1fr;
+  column-gap: var(--trip-grid-column-gap);
+  align-content: start;
+}
+
+/* #endregion */
