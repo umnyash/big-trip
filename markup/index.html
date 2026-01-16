@@ -13,7 +13,35 @@
 
 <body class="page__body">
   <h1 class="visually-hidden">«Big Trip» &mdash; travel planner, trip budget calculator, and attractions guide.</h1>
-  <div class="trip"></div>
+  <div class="trip">
+    <header class="trip__header trip-header">
+      <img class="trip-header__logo" src="img/logo.png" width="42" height="42" alt="Логотип в виде каменистой горы.">
+      <h2 class="trip-header__title">Berlin &mdash; Frankfurt &mdash; Munich</h2>
+      <p class="trip-header__dates">
+        <time datetime="2026-08-14">14</time> &mdash; <time datetime="2026-08-16">16 Aug</time>
+      </p>
+      <p class="trip-header__price">Total: €&nbsp;1415</p>
+      <form class="trip-header__filter trip-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="everything" checked>
+          <span class="checker__label">Everything</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="future">
+          <span class="checker__label">Future</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="present">
+          <span class="checker__label">Present</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="past">
+          <span class="checker__label">Past</span>
+        </label>
+      </form>
+      <button class="trip-header__add-button button button--accent button--size_l" type="button" data-text-icon="+">New event</button>
+    </header>
+  </div>
 </body>
 
 </html>

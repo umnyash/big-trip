@@ -346,4 +346,85 @@
   align-content: start;
 }
 
+.trip__header {
+  grid-column: 1 / -1;
+}
+
+/* #endregion */
+
+/* #region trip-filter */
+
+.trip-filter {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 19px;
+}
+
+/* #endregion */
+
+/* #region trip-header */
+
+.trip-header {
+  display: grid;
+  padding: 23px 0 10px;
+  grid-template-columns: subgrid;
+  grid-template-areas:
+    ". . logo title  title  title  title  title  price      price      price      ."
+    ". . logo dates  dates  dates  dates  dates  price      price      price      ."
+    ". . logo filter filter filter filter filter add-button add-button add-button .";
+  align-items: start;
+  color: var(--text-additional-color);
+  background: var(--brand-color) url("../img/header-background.png") 0 0 / cover;
+}
+
+.trip-header__logo {
+  grid-area: logo;
+  width: 100%;
+  height: auto;
+}
+
+.trip-header__title {
+  grid-area: title;
+  margin: 0;
+  font-size: 17px;
+  line-height: 21px;
+  font-weight: 800;
+}
+
+.trip-header__dates {
+  grid-area: dates;
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.trip-header__price {
+  grid-area: price;
+  place-self: center end;
+  min-width: 171px;
+  margin: 0;
+  text-align: center;
+  font-size: 21px;
+  line-height: 25px;
+  font-weight: 700;
+}
+
+.trip-header__filter {
+  grid-area: filter;
+  align-self: end;
+}
+
+.trip-header__add-button {
+  grid-area: add-button;
+  place-self: end;
+  margin: 0 0 2px;
+}
+
+.trip-header__title ~ .trip-header__add-button {
+  margin-top: 35px;
+}
+
 /* #endregion */
