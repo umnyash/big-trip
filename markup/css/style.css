@@ -384,6 +384,11 @@
   opacity: 0.9;
 }
 
+.trip__sorting {
+  grid-column: 2 / -2;
+  margin: 22px 0 0;
+}
+
 /* #endregion */
 
 /* #region trip-filter */
@@ -459,6 +464,26 @@
 
 .trip-header__title ~ .trip-header__add-button {
   margin-top: 35px;
+}
+
+/* #endregion */
+
+/* #region trip-sorting */
+
+.trip-sorting {
+  display: grid;
+  grid-template-columns: subgrid;
+  justify-items: start;
+}
+
+.trip-sorting__item:nth-child(1),
+.trip-sorting__item:nth-child(4),
+.trip-sorting__item:nth-child(5) {
+  grid-column: span 2;
+}
+
+.trip-sorting__item:nth-child(n + 2) {
+  margin-left: -23px;
 }
 
 /* #endregion */
