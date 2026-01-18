@@ -100,6 +100,53 @@
 
 /* #endregion */
 
+/* #region arrow-button */
+
+.arrow-button {
+  position: relative;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  transition: color 200ms linear;
+}
+
+.arrow-button::before {
+  /* Increases the clickable area to 40 pixels. */
+  content: "";
+  position: absolute;
+  inset: calc((100% - 40px) / 2);
+}
+
+.arrow-button::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  width: 12px;
+  min-width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 100ms linear;
+}
+
+.arrow-button:hover {
+  color: var(--brand-color);
+}
+
+.arrow-button:active {
+  color: var(--brand-color-60);
+}
+
+.arrow-button:active::after {
+  transform: translateY(calc(2px - 25%)) rotate(45deg);
+}
+
+/* #endregion */
+
 /* #region button */
 
 .button {
@@ -288,6 +335,125 @@
 
 /* #endregion */
 
+/* #region event-card */
+
+.event-card {
+  display: grid;
+  padding: 20px;
+  grid-template-columns: subgrid;
+  row-gap: 4px;
+  align-items: center;
+  grid-template-areas:
+    "day icon title time     price price offers offers favorite-button edit-button"
+    "day icon title duration price price offers offers favorite-button edit-button";
+  font-size: 17px;
+  line-height: 21px;
+}
+
+.event-card__title {
+  grid-area: title;
+  margin: 0;
+  font: inherit;
+}
+
+.event-card__icon {
+  grid-area: icon;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.event-card__day {
+  grid-area: day;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.event-card__time {
+  grid-area: time;
+  align-self: end;
+  margin: 0;
+}
+
+.event-card__duration {
+  grid-area: duration;
+  align-self: start;
+  margin: 0;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-secondary-color-strong);
+  opacity: 0.9;
+}
+
+.event-card__price {
+  grid-area: price;
+  margin: 0;
+}
+
+.event-card__offers {
+  grid-area: offers;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-weight: 600;
+}
+
+.event-card__favorite-button {
+  grid-area: favorite-button;
+  width: 28px;
+  height: 28px;
+}
+
+.event-card__edit-button {
+  grid-area: edit-button;
+  justify-self: center;
+  width: 12px;
+  margin: 0 0 5px;
+}
+
+/* #endregion */
+
+/* #region event-icon */
+
+.event-icon {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--background-secondary-color);
+}
+
+.event-icon__image {
+  width: 18px;
+  height: auto;
+  max-height: 19px;
+}
+
+/* #endregion */
+
+/* #region events-list */
+
+.events-list {
+  display: grid;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: subgrid;
+  row-gap: 54px;
+}
+
+.events-list__item {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.events-list__card {
+  grid-column: 1 / -1;
+}
+
+/* #endregion */
+
 /* #region favorite-button */
 
 .favorite-button {
@@ -387,6 +553,11 @@
 .trip__sorting {
   grid-column: 2 / -2;
   margin: 22px 0 0;
+}
+
+.trip__list {
+  grid-column: 2 / -2;
+  margin: 8px 0 54px;
 }
 
 /* #endregion */
