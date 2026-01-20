@@ -77,6 +77,85 @@
       <span class="visually-hidden">Add to favorites</span>
     </button>
   </section>
+  <section>
+    <h2>Dropdown</h2>
+    Icon / Closed
+    <div class="dropdown">
+      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
+        <span class="visually-hidden">Event type:</span>
+        <span class="dropdown__toggle-icon event-icon event-icon--accent">
+          <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
+        </span>
+      </button>
+      <ul class="dropdown__list">
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="bus" checked>
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+              Bus
+            </span>
+          </label>
+        </li>
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="taxi">
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
+              Taxi
+            </span>
+          </label>
+        </li>
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="drive">
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+              Drive
+            </span>
+          </label>
+        </li>
+      </ul>
+    </div>
+    Icon / Open
+    <div class="dropdown">
+      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="true">
+        <span class="visually-hidden">Event type:</span>
+        <span class="dropdown__toggle-icon event-icon event-icon--accent">
+          <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
+        </span>
+      </button>
+      <ul class="dropdown__list">
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="bus" checked>
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+              Bus
+            </span>
+          </label>
+        </li>
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="taxi">
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
+              Taxi
+            </span>
+          </label>
+        </li>
+        <li>
+          <label class="dropdown__option">
+            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="drive">
+            <span class="dropdown__option-label">
+              <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+              Drive
+            </span>
+          </label>
+        </li>
+      </ul>
+    </div>
+  </section>
 </body>
 
 </html>
