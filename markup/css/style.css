@@ -133,6 +133,11 @@
   transition: transform 100ms linear;
 }
 
+.arrow-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 4px;
+}
+
 .arrow-button:hover {
   color: var(--brand-color);
 }
@@ -159,6 +164,11 @@
 
 .button:enabled {
   cursor: pointer;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .button:enabled:hover {
@@ -233,6 +243,11 @@
 
 .checker__control[type="radio"]:enabled:not(:checked) + .checker__label {
   cursor: pointer;
+}
+
+.checker__control:focus-visible + .checker__label {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 /* accent */
@@ -369,6 +384,11 @@
   max-width: 100%;
   min-height: 100%;
   max-height: 100%;
+}
+
+.dropdown__toggle-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .dropdown__toggle-button:hover {
@@ -644,6 +664,10 @@
   appearance: textfield;
 }
 
+.event-form__field-control:focus {
+  outline: 2px solid var(--accent-color);
+}
+
 .event-form__field-control::-webkit-outer-spin-button,
 .event-form__field-control::-webkit-inner-spin-button {
   appearance: none;
@@ -767,6 +791,11 @@
   cursor: pointer;
 }
 
+.favorite-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 .favorite-button:enabled:hover {
   color: var(--accent-color-60);
 }
@@ -808,6 +837,10 @@
   padding: 0 20px;
   column-gap: 5px;
   overflow-x: auto;
+}
+
+.gallery:focus-visible {
+  outline: 2px solid var(--accent-color);
 }
 
 .gallery__image {
