@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" class="page">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Big Trip</title>
+  <link rel="icon" href="favicon.ico">
+  <meta name="description" content="«Big Trip» — is a modern service for real travelers, helping them plan their itinerary in detail, calculate their travel costs, and get information about attractions.">
+  <meta name="keywords" content="Big Trip, travel service, trip planner">
+</head>
+
+<body class="page__body">
+  <h1 class="visually-hidden">«Big Trip» &mdash; travel planner, trip budget calculator, attractions guide.</h1>
+  <div class="trip">
+    <header class="trip__header trip-header">
+      <img class="trip-header__logo" src="img/logo.png" width="42" height="42" alt="Логотип в виде каменистой горы.">
+      <h2 class="trip-header__title">Berlin &mdash; Frankfurt &mdash; Munich</h2>
+      <p class="trip-header__dates">
+        <time datetime="2026-08-14">14</time> &mdash; <time datetime="2026-08-16">16 Aug</time>
+      </p>
+      <p class="trip-header__price">Total: €&nbsp;1415</p>
+      <form class="trip-header__filter trip-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="everything" checked>
+          <span class="checker__label">Everything</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="future">
+          <span class="checker__label">Future</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="present">
+          <span class="checker__label">Present</span>
+        </label>
+        <label class="checker checker--soft">
+          <input class="checker__control visually-hidden" type="radio" name="period" value="past">
+          <span class="checker__label">Past</span>
+        </label>
+      </form>
+      <button class="trip-header__add-button button button--accent button--size_l" type="button" data-text-icon="+">New event</button>
+    </header>
+    <form class="trip__sorting trip-sorting" action="https://echo.htmlacademy.ru/courses" method="get">
+      <label class="trip-sorting__item checker checker--emphasis">
+        <input class="checker__control visually-hidden" type="radio" name="criterion" value="date" checked>
+        <span class="checker__label">Day</span>
+      </label>
+      <span class="trip-sorting__item checker checker--emphasis">
+        <span class="checker__label">Event</span>
+      </span>
+      <label class="trip-sorting__item checker checker--emphasis">
+        <input class="checker__control visually-hidden" type="radio" name="criterion" value="duration">
+        <span class="checker__label">Time</span>
+      </label>
+      <label class="trip-sorting__item checker checker--emphasis">
+        <input class="checker__control visually-hidden" type="radio" name="criterion" value="price">
+        <span class="checker__label">Price</span>
+      </label>
+      <span class="trip-sorting__item checker checker--emphasis">
+        <span class="checker__label">Offers</span>
+      </span>
+    </form>
+    <ul class="trip__list events-list">
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Bus Berlin</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-14">Aug 14</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-14T09:00">09:00</time>
+            &mdash;
+            <time datetime="2026-08-14T09:45">09:45</time>
+          </p>
+          <p class="event-card__duration">45m</p>
+          <p class="event-card__price">€&nbsp;25</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Choose seats +&#8288;€&nbsp;5</li>
+            <li class="event-card__offer">Infotainment system +&#8288;€&nbsp;3</li>
+            <li class="event-card__offer">Order meal +&#8288;€&nbsp;7</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="true">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Sightseeing Berlin</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/sightseeing.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-14">Aug 14</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-14T10:00">10:00</time>
+            &mdash;
+            <time datetime="2026-08-14T12:30">12:30</time>
+          </p>
+          <p class="event-card__duration">02h 30m</p>
+          <p class="event-card__price">€&nbsp;45</p>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="false">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <form class="events-list__form event-form" action="https://echo.htmlacademy.ru" method="post">
+          <div class="event-form__header">
+            <h3 class="visually-hidden">Editing an event</h3>
+            <div class="event-form__type-dropdown dropdown">
+              <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
+                <span class="visually-hidden">Event type:</span>
+                <span class="dropdown__toggle-icon event-icon event-icon--accent">
+                  <img class="event-icon__image" src="img/icons/event-types/restaurant.png" width="18" height="18" aria-labelledby="event-form-type">
+                </span>
+              </button>
+              <ul class="dropdown__list">
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="taxi">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
+                      Taxi
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="bus">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+                      Bus
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="train">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/train.png" width="18" height="18" alt="">
+                      Train
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="ship">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/ship.png" width="18" height="18" alt="">
+                      Ship
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="drive">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+                      Drive
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="flight">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/flight.png" width="18" height="18" alt="">
+                      Flight
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="check-in">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/check-in.png" width="18" height="18" alt="">
+                      Check-in
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="sightseeing">
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/sightseeing.png" width="18" height="18" alt="">
+                      Sightseeing
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label class="dropdown__option">
+                    <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="restaurant" checked>
+                    <span class="dropdown__option-label">
+                      <img class="dropdown__option-icon" src="img/icons/event-types/restaurant.png" width="18" height="18" alt="">
+                      Restaurant
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+            <div class="event-form__field-wrapper event-form__field-wrapper--title">
+              <span id="event-form-type">Restaurant</span>
+              <label class="event-form__field">
+                <span class="visually-hidden">Destination:</span>
+                <input class="event-form__field-control" type="text" name="destination" value="Berlin" list="destinations-data-list" required>
+                <datalist id="destinations-data-list">
+                  <option value="Berlin"></option>
+                  <option value="Chamonix"></option>
+                  <option value="Frankfurt"></option>
+                  <option value="Kioto"></option>
+                  <option value="Monaco"></option>
+                  <option value="Munich"></option>
+                  <option value="Nagasaki"></option>
+                  <option value="Naples"></option>
+                  <option value="Valencia"></option>
+                  <option value="Vien"></option>
+                </datalist>
+              </label>
+            </div>
+            <div class="event-form__field-wrapper event-form__field-wrapper--dates">
+              <label class="event-form__field">
+                <span class="visually-hidden">From:</span>
+                <input class="event-form__field-control" type="text" name="date-from" value="14/08/26 13:00" required>
+              </label>
+              &mdash;
+              <label class="event-form__field">
+                <span class="visually-hidden">To:</span>
+                <input class="event-form__field-control" type="text" name="date-to" value="14/08/26 15:00" required>
+              </label>
+            </div>
+            <div class="event-form__field-wrapper event-form__field-wrapper--price">
+              <label class="event-form__field">
+                <span class="visually-hidden">Base price:</span>€
+                <input class="event-form__field-control" type="number" name="base-price" value="75" min="1" required>
+              </label>
+            </div>
+            <div class="event-form__actions">
+              <button class="button button--primary button--size_s" type="submit">
+                Save
+              </button>
+              <button class="button button--simple button--size_s" type="button">
+                Delete
+              </button>
+            </div>
+            <button class="event-form__close-button arrow-button" type="button">
+              <span class="visually-hidden">Close</span>
+            </button>
+          </div>
+          <fieldset class="event-form__section">
+            <legend class="event-form__section-title">Offers</legend>
+            <div class="event-form__offers">
+              <label class="checker checker--accent">
+                <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-1" checked>
+                <span class="checker__label">Choose live music +€&nbsp;12</span>
+              </label>
+              <label class="checker checker--accent">
+                <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-2">
+                <span class="checker__label">Choose VIP area +€&nbsp;25</span>
+              </label>
+            </div>
+          </fieldset>
+          <section class="event-form__section">
+            <h4 class="event-form__section-title">Destination</h4>
+            <p class="event-form__section-text">Berlin, the capital of Germany, is a vibrant city known for its history, culture, and nightlife. Famous landmarks include the Brandenburg Gate, the Berlin Wall, and Museum Island, attracting visitors from around the world.</p>
+            <div class="event-form__gallery gallery">
+              <img class="gallery__image" src="img/destination-photos/1.jpg" width="228" height="152" alt="Destination photo.">
+              <img class="gallery__image" src="img/destination-photos/2.jpg" width="228" height="152" alt="Destination photo.">
+              <img class="gallery__image" src="img/destination-photos/3.jpg" width="228" height="152" alt="Destination photo.">
+              <img class="gallery__image" src="img/destination-photos/4.jpg" width="228" height="152" alt="Destination photo.">
+              <img class="gallery__image" src="img/destination-photos/5.jpg" width="228" height="152" alt="Destination photo.">
+            </div>
+          </section>
+        </form>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Flight Frankfurt</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/flight.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-14">Aug 14</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-14T17:00">17:00</time>
+            &mdash;
+            <time datetime="2026-08-14T19:40">19:40</time>
+          </p>
+          <p class="event-card__duration">02h 40m</p>
+          <p class="event-card__price">€&nbsp;190</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Upgrade to comfort class +&#8288;€&nbsp;60</li>
+            <li class="event-card__offer">Add luggage +&#8288;€&nbsp;35</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="true">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Check-in Frankfurt</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/check-in.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-14">Aug 14</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-14T20:30">20:30</time>
+            &mdash;
+            <time datetime="2026-08-15T09:00">09:00</time>
+          </p>
+          <p class="event-card__duration">12h 30m</p>
+          <p class="event-card__price">€&nbsp;180</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Add breakfast +&#8288;€&nbsp;15</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="false">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Sightseeing Frankfurt</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/sightseeing.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-15">Aug 15</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-15T10:30">10:30</time>
+            &mdash;
+            <time datetime="2026-08-15T13:00">13:00</time>
+          </p>
+          <p class="event-card__duration">2h 30m</p>
+          <p class="event-card__price">€&nbsp;40</p>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="true">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Restaurant Frankfurt</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/restaurant.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-15">Aug 15</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-15T13:30">13:30</time>
+            &mdash;
+            <time datetime="2026-08-15T15:30">15:30</time>
+          </p>
+          <p class="event-card__duration">02h 00m</p>
+          <p class="event-card__price">€&nbsp;90</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Choose VIP area +&#8288;€&nbsp;25</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="false">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Flight Munich</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/flight.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-15">Aug 15</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-15T17:00">17:00</time>
+            &mdash;
+            <time datetime="2026-08-15T18:50">18:50</time>
+          </p>
+          <p class="event-card__duration">01h 50m</p>
+          <p class="event-card__price">€&nbsp;210</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Upgrade to business class +&#8288;€&nbsp;80</li>
+            <li class="event-card__offer">Business lounge +&#8288;€&nbsp;35</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="false">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Drive Munich</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-15">Aug 15</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-15T19:15">19:15</time>
+            &mdash;
+            <time datetime="2026-08-15T20:00">20:00</time>
+          </p>
+          <p class="event-card__duration">45m</p>
+          <p class="event-card__price">€&nbsp;45</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">With automatic transmission +&#8288;€&nbsp;15</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="false">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+      <li class="events-list__item">
+        <article class="events-list__card event-card">
+          <h3 class="event-card__title">Check-in Munich</h3>
+          <span class="event-card__icon event-icon">
+            <img class="event-icon__image" src="img/icons/event-types/check-in.png" width="18" height="18" alt="">
+          </span>
+          <time class="event-card__day" datetime="2026-08-15">Aug 15</time>
+          <p class="event-card__time">
+            <time datetime="2026-08-15T20:15">20:15</time>
+            &mdash;
+            <time datetime="2026-08-16T10:00">12:00</time>
+          </p>
+          <p class="event-card__duration">15h 45m</p>
+          <p class="event-card__price">€&nbsp;170</p>
+          <h4 class="visually-hidden">Offers</h4>
+          <ul class="event-card__offers">
+            <li class="event-card__offer">Order a meal from the restaurant +&#8288;€&nbsp;35</li>
+            <li class="event-card__offer">Add breakfast +&#8288;€&nbsp;18</li>
+          </ul>
+          <button class="event-card__favorite-button favorite-button" type="button" aria-pressed="true">
+            <span class="visually-hidden">Add to favorite</span>
+          </button>
+          <button class="event-card__edit-button arrow-button" type="button">
+            <span class="visually-hidden">Edit event</span>
+          </button>
+        </article>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>
