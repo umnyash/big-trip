@@ -9,151 +9,191 @@
   <link rel="icon" href="favicon.ico">
   <meta name="description" content="«Big Trip» — is a modern service for real travelers, helping them plan their itinerary in detail, calculate their travel costs, and get information about attractions.">
   <meta name="keywords" content="Big Trip, travel service, trip planner">
+  <style>
+    h1 {
+      margin: 60px;
+      text-align: center;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    section h2 {
+      grid-column: 1 / -1;
+      margin: 0;
+    }
+
+    .container {
+      display: grid;
+      max-width: 1180px;
+      margin: 0 auto;
+      grid-template-columns: auto auto;
+      gap: 20px 40px;
+      justify-content: start;
+      place-items: center start;
+    }
+
+    .alter {
+      padding: 28px;
+      background-color: var(--background-secondary-color);
+    }
+  </style>
 </head>
 
 <body class="page__body">
   <h1>UI Kit</h1>
   <section>
-    <h2>Button</h2>
-    Primary / S
-    <button class="button button--primary button--size_s">Save</button>
-    Primary / S (disabled)
-    <button class="button button--primary button--size_s" disabled>Save</button>
-    Secondary / S
-    <button class="button button--simple button--size_s">Delete</button>
-    Secondary / S (disabled)
-    <button class="button button--simple button--size_s" disabled>Delete</button>
-    Accent / L / Text icon
-    <button class="button button--accent button--size_l" data-text-icon="+">New event</button>
-    Accent / L / Text icon (disabled)
-    <button class="button button--accent button--size_l" data-text-icon="+" disabled>New event</button>
-  </section>
-  <section>
-    <h2>Radio</h2>
-    Soft
-    <label class="checker checker--soft">
-      <input class="checker__control visually-hidden" name="checker-radio" type="radio">
-      <span class="checker__label">Soft</span>
-    </label>
-    Soft (disabled)
-    <label class="checker checker--soft">
-      <input class="checker__control visually-hidden" name="checker-radio" type="radio" disabled>
-      <span class="checker__label">Soft</span>
-    </label>
-    Emphasis
-    <label class="checker checker--emphasis">
-      <input class="checker__control visually-hidden" name="checker-radio" type="radio">
-      <span class="checker__label">Emphasis</span>
-    </label>
-    Emphasis (fake)
-    <span class="checker checker--emphasis">
-      <span class="checker__label">Emphasis</span>
-    </span>
-  </section>
-  <section style="background-color: var(--background-secondary-color);">
-    <h2>Checkbox</h2>
-    Accent
-    <label class="checker checker--accent">
-      <input class="checker__control visually-hidden" name="checker-checkboxes" type="checkbox">
-      <span class="checker__label">Accent</span>
-    </label>
-  </section>
-  <section>
-    <h2>Favorite Button</h2>
-    Default
-    <button class="favorite-button" type="button" aria-pressed="false">
-      <span class="visually-hidden">Add to favorites</span>
-    </button>
-    Active
-    <button class="favorite-button" type="button" aria-pressed="true">
-      <span class="visually-hidden">Add to favorites</span>
-    </button>
-    Default (disabled)
-    <button class="favorite-button" type="button" aria-pressed="false" disabled>
-      <span class="visually-hidden">Add to favorites</span>
-    </button>
-    Active (disabled)
-    <button class="favorite-button" type="button" aria-pressed="true" disabled>
-      <span class="visually-hidden">Add to favorites</span>
-    </button>
-  </section>
-  <section>
-    <h2>Dropdown</h2>
-    Icon / Closed
-    <div class="dropdown">
-      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
-        <span class="visually-hidden">Event type:</span>
-        <span class="dropdown__toggle-icon event-icon event-icon--accent">
-          <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
-        </span>
-      </button>
-      <ul class="dropdown__list">
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="bus" checked>
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
-              Bus
-            </span>
-          </label>
-        </li>
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="taxi">
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
-              Taxi
-            </span>
-          </label>
-        </li>
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="drive">
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
-              Drive
-            </span>
-          </label>
-        </li>
-      </ul>
+    <div class="container">
+      <h2>Button</h2>
+      Primary / S
+      <button class="button button--primary button--size_s">Save</button>
+      Primary / S (disabled)
+      <button class="button button--primary button--size_s" disabled>Save</button>
+      Secondary / S
+      <button class="button button--simple button--size_s">Delete</button>
+      Secondary / S (disabled)
+      <button class="button button--simple button--size_s" disabled>Delete</button>
+      Accent / L / Text icon
+      <button class="button button--accent button--size_l" data-text-icon="+">New event</button>
+      Accent / L / Text icon (disabled)
+      <button class="button button--accent button--size_l" data-text-icon="+" disabled>New event</button>
     </div>
-    Icon / Open
-    <div class="dropdown">
-      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="true">
-        <span class="visually-hidden">Event type:</span>
-        <span class="dropdown__toggle-icon event-icon event-icon--accent">
-          <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
-        </span>
+  </section>
+  <section>
+    <div class="container">
+      <h2>Radio</h2>
+      Soft
+      <label class="checker checker--soft">
+        <input class="checker__control visually-hidden" name="checker-radio" type="radio">
+        <span class="checker__label">Soft</span>
+      </label>
+      Soft (disabled)
+      <label class="checker checker--soft">
+        <input class="checker__control visually-hidden" name="checker-radio" type="radio" disabled>
+        <span class="checker__label">Soft</span>
+      </label>
+      Emphasis
+      <label class="checker checker--emphasis">
+        <input class="checker__control visually-hidden" name="checker-radio" type="radio">
+        <span class="checker__label">Emphasis</span>
+      </label>
+      Emphasis (fake)
+      <span class="checker checker--emphasis">
+        <span class="checker__label">Emphasis</span>
+      </span>
+    </div>
+  </section>
+  <section class="alter">
+    <div class="container">
+      <h2>Checkbox</h2>
+      Accent
+      <label class="checker checker--accent">
+        <input class="checker__control visually-hidden" name="checker-checkboxes" type="checkbox">
+        <span class="checker__label">Accent</span>
+      </label>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <h2>Favorite Button</h2>
+      Default
+      <button class="favorite-button" type="button" aria-pressed="false">
+        <span class="visually-hidden">Add to favorites</span>
       </button>
-      <ul class="dropdown__list">
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="bus" checked>
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
-              Bus
-            </span>
-          </label>
-        </li>
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="taxi">
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
-              Taxi
-            </span>
-          </label>
-        </li>
-        <li>
-          <label class="dropdown__option">
-            <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="drive">
-            <span class="dropdown__option-label">
-              <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
-              Drive
-            </span>
-          </label>
-        </li>
-      </ul>
+      Active
+      <button class="favorite-button" type="button" aria-pressed="true">
+        <span class="visually-hidden">Add to favorites</span>
+      </button>
+      Default (disabled)
+      <button class="favorite-button" type="button" aria-pressed="false" disabled>
+        <span class="visually-hidden">Add to favorites</span>
+      </button>
+      Active (disabled)
+      <button class="favorite-button" type="button" aria-pressed="true" disabled>
+        <span class="visually-hidden">Add to favorites</span>
+      </button>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <h2>Dropdown</h2>
+      Icon / Closed
+      <div class="dropdown">
+        <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
+          <span class="visually-hidden">Event type:</span>
+          <span class="dropdown__toggle-icon event-icon event-icon--accent">
+            <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
+          </span>
+        </button>
+        <ul class="dropdown__list">
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="bus" checked>
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+                Bus
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="taxi">
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
+                Taxi
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-1-type" type="radio" value="drive">
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+                Drive
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+      Icon / Open
+      <div class="dropdown">
+        <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="true">
+          <span class="visually-hidden">Event type:</span>
+          <span class="dropdown__toggle-icon event-icon event-icon--accent">
+            <img class="event-icon__image" src="img/icons/event-types/bus.png" width="18" height="18" alt="Taxi.">
+          </span>
+        </button>
+        <ul class="dropdown__list">
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="bus" checked>
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
+                Bus
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="taxi">
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
+                Taxi
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="dropdown__option">
+              <input class="dropdown__option-control visually-hidden" name="event-2-type" type="radio" value="drive">
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
+                Drive
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </body>
