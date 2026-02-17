@@ -4,6 +4,7 @@ import dayjsDurationPlugin from 'dayjs/plugin/duration';
 const DateFormat = {
   TIME: 'HH:mm',
   MONTH_DAY: 'MMM D',
+  FULL: 'DD/MM/YY HH:mm',
 };
 
 const DurationFormat = {
@@ -19,6 +20,10 @@ function formatTime(date) {
 
 function formatDay(date) {
   return dayjs(date).format(DateFormat.MONTH_DAY);
+}
+
+function formatFullDate(date) {
+  return dayjs(date).format(DateFormat.FULL);
 }
 
 function calcDuration(startDate, endDate) {
@@ -46,4 +51,4 @@ function getFormattedDuration(startDate, endDate) {
   return formatDuration(calcDuration(startDate, endDate));
 }
 
-export { formatTime, formatDay, getFormattedDuration };
+export { formatTime, formatDay, formatFullDate, getFormattedDuration };
