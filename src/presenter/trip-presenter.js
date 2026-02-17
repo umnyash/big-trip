@@ -10,16 +10,19 @@ import TripPriceView from '../view/trip-price-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import TripTitleView from '../view/trip-title-view.js';
 
-const EVENT_CARDS_COUNT = 3;
-
 export default class TripPresenter {
   eventListComponent = new EventListView();
 
-  constructor({ headerElement }) {
+  constructor({ headerElement, model }) {
     this.headerElement = headerElement;
+    this.model = model;
   }
 
   init() {
+    this.destinations = this.model.getDestinations();
+    this.events = this.model.getEvents();
+    this.offers = this.model.getOffers();
+
     render(new TripTitleView(), this.headerElement);
     render(new TripDatesView(), this.headerElement);
     render(new TripPriceView(), this.headerElement);
@@ -30,7 +33,7 @@ export default class TripPresenter {
 
     render(new EventFormView(), this.eventListComponent.getElement());
 
-    for (let i = 0; i < EVENT_CARDS_COUNT; i++) {
+    for (let i = 1; i < this.events.length; i++) {
       render(new EventCardView(), this.eventListComponent.getElement());
     }
   }
