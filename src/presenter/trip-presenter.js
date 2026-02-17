@@ -31,7 +31,14 @@ export default class TripPresenter {
     render(this.eventListComponent, this.headerElement, RenderPosition.AFTEREND);
     render(new TripSortView(), this.headerElement, RenderPosition.AFTEREND);
 
-    render(new EventFormView(), this.eventListComponent.getElement());
+    render(
+      new EventFormView({
+        event: this.events[0],
+        destinations: this.destinations,
+        offers: this.offers,
+      }),
+      this.eventListComponent.getElement()
+    );
 
     for (let i = 1; i < this.events.length; i++) {
       const event = this.events[i];
