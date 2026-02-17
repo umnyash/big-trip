@@ -1,184 +1,200 @@
 import { createElement } from '../framework';
+import { eventTypes, eventTypeIds } from '../data';
+import { formatFullDate } from '../utils';
 
-function createEventFormTemplate() {
+const DEFAULT_EVENT_TYPE = 'flight';
+
+const newEvent = {
+  type: DEFAULT_EVENT_TYPE,
+  basePrice: 0,
+  destinationId: null,
+  startDate: null,
+  endDate: null,
+  isFavorite: false,
+  offerIds: [],
+};
+
+function createEventFormTypeDropdownTemplate(selectedTypeId) {
+  return (
+    `<div class="event-form__type-dropdown dropdown">
+      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
+        <span class="visually-hidden">Event type:</span>
+        <span class="dropdown__toggle-icon event-icon event-icon--accent">
+          <img class="event-icon__image" src="${eventTypes[selectedTypeId].iconUrl}" width="18" height="18" aria-labelledby="event-form-type">
+        </span>
+      </button>
+      <ul class="dropdown__list">
+        ${eventTypeIds.map((id) => `
+          <li>
+            <label class="dropdown__option">
+              <input
+                class="dropdown__option-control visually-hidden"
+                name="type"
+                type="radio"
+                value="${id}"
+                ${id === selectedTypeId ? 'checked' : ''}
+              >
+              <span class="dropdown__option-label">
+                <img class="dropdown__option-icon" src="${eventTypes[id].iconUrl}" width="18" height="18" alt="">
+                ${eventTypes[id].title}
+              </span>
+            </label>
+          </li>
+        `).join('')}
+      </ul>
+    </div>`
+  );
+}
+
+function createEventFormDestinationFieldTemplate(destinations, value = '', eventId) {
+  const dataListId = `${eventId ? `event-${eventId}` : 'new-event'}-destinations-data-list`;
+
+  return (
+    `<label class="event-form__field">
+      <span class="visually-hidden">Destination:</span>
+      <input
+        class="event-form__field-control"
+        type="text"
+        name="destination"
+        value="${value}"
+        list="${dataListId}"
+        required
+      >
+      <datalist id="${dataListId}">
+        ${Object.values(destinations).map(({ name }) => `
+          <option value="${name}"></option>
+        `).join('')}
+      </datalist>
+    </label>`
+  );
+}
+
+function createEventFormOffersTemplate(offers, selectedOfferIds) {
+  const offersIds = Object.keys(offers);
+
+  if (!offersIds.length) {
+    return '';
+  }
+
+  return (
+    `<fieldset class="event-form__section">
+      <legend class="event-form__section-title">Offers</legend>
+      <div class="event-form__offers">
+        ${offersIds.map((id) => `
+          <label class="checker checker--accent">
+            <input
+              class="checker__control visually-hidden"
+              type="checkbox"
+              name="offer-ids"
+              value="${id}"
+              ${selectedOfferIds.includes(id) ? 'checked' : ''}
+            >
+            <span class="checker__label">
+              ${offers[id].title} +&#8288;€&nbsp;${offers[id].price}
+            </span>
+          </label>
+        `).join('')}
+      </div>
+    </fieldset>`
+  );
+}
+
+function createEventFormDestinationTemplate(destination) {
+  if (!destination || (!destination.description && !destination.images.length)) {
+    return '';
+  }
+
+  const { description, images } = destination;
+
+  return (
+    `<section class="event-form__section">
+      <h4 class="event-form__section-title">Destination</h4>
+      ${description ? `<p class="event-form__section-text">${description}</p>` : ''}
+      ${images.length
+      ? `
+        <div class="event-form__gallery gallery">
+          ${images.map((image) => `
+            <img class="gallery__image" src="${image.url}" width="228" height="152" alt="${image.description}">
+          `).join('')}
+        </div>`
+      : ''}
+    </section>`
+  );
+}
+
+function createEventFormTemplate(event, destinations, offers) {
+  const { id, type, destinationId, startDate, endDate, basePrice } = event;
+  const isNew = !id;
+
+  const formTitle = isNew ? 'Adding an event' : 'Editing an event';
+  const typeTitle = eventTypes[type].title;
+  const formattedStartDate = startDate ? formatFullDate(startDate) : '';
+  const formattedEndDate = endDate ? formatFullDate(endDate) : '';
+  const destination = destinations[destinationId];
+
   return (
     `<li class="event-list__item">
       <form class="event-list__form event-form" action="https://echo.htmlacademy.ru" method="post">
         <div class="event-form__header">
-          <h3 class="visually-hidden">Adding an event</h3>
-          <div class="event-form__type-dropdown dropdown">
-            <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
-              <span class="visually-hidden">Event type:</span>
-              <span class="dropdown__toggle-icon event-icon event-icon--accent">
-                <img class="event-icon__image" src="img/icons/event-types/flight.png" width="18" height="18" aria-labelledby="event-form-type">
-              </span>
-            </button>
-            <ul class="dropdown__list">
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="taxi">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/taxi.png" width="18" height="18" alt="">
-                    Taxi
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="bus">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/bus.png" width="18" height="18" alt="">
-                    Bus
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="train">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/train.png" width="18" height="18" alt="">
-                    Train
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="ship">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/ship.png" width="18" height="18" alt="">
-                    Ship
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="drive">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/drive.png" width="18" height="18" alt="">
-                    Drive
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="flight" checked>
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/flight.png" width="18" height="18" alt="">
-                    Flight
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="check-in">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/check-in.png" width="18" height="18" alt="">
-                    Check-in
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="sightseeing">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/sightseeing.png" width="18" height="18" alt="">
-                    Sightseeing
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label class="dropdown__option">
-                  <input class="dropdown__option-control visually-hidden" name="type" type="radio" value="restaurant">
-                  <span class="dropdown__option-label">
-                    <img class="dropdown__option-icon" src="img/icons/event-types/restaurant.png" width="18" height="18" alt="">
-                    Restaurant
-                  </span>
-                </label>
-              </li>
-            </ul>
-          </div>
+          <h3 class="visually-hidden">${formTitle}</h3>
+          ${createEventFormTypeDropdownTemplate(type)}
           <div class="event-form__field-wrapper event-form__field-wrapper--title">
-            <span id="event-form-type">Flight</span>
-            <label class="event-form__field">
-              <span class="visually-hidden">Destination:</span>
-              <input class="event-form__field-control" type="text" name="destination" value="" list="new-event-destinations-data-list" required>
-              <datalist id="new-event-destinations-data-list">
-                <option value="Berlin"></option>
-                <option value="Chamonix"></option>
-                <option value="Frankfurt"></option>
-                <option value="Kioto"></option>
-                <option value="Monaco"></option>
-                <option value="Munich"></option>
-                <option value="Nagasaki"></option>
-                <option value="Naples"></option>
-                <option value="Valencia"></option>
-                <option value="Vien"></option>
-              </datalist>
-            </label>
+            <span id="event-form-type">${typeTitle}</span>
+            ${createEventFormDestinationFieldTemplate(destinations, destination?.name, id)}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--dates">
             <label class="event-form__field">
               <span class="visually-hidden">From:</span>
-              <input class="event-form__field-control" type="text" name="date-from" value="" required>
+              <input class="event-form__field-control" type="text" name="date-from" value="${formattedStartDate}" required>
             </label>
             &mdash;
             <label class="event-form__field">
               <span class="visually-hidden">To:</span>
-              <input class="event-form__field-control" type="text" name="date-to" value="" required>
+              <input class="event-form__field-control" type="text" name="date-to" value="${formattedEndDate}" required>
             </label>
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--price">
             <label class="event-form__field">
               <span class="visually-hidden">Base price:</span>€
-              <input class="event-form__field-control" type="number" name="base-price" value="0" min="1" required>
+              <input class="event-form__field-control" type="number" name="base-price" value="${basePrice}" min="1" required>
             </label>
           </div>
           <div class="event-form__actions">
             <button class="button button--primary button--size_s" type="submit">
               Save
             </button>
-            <button class="button button--simple button--size_s" type="button">
-              Cancel
+            ${isNew ? `
+              <button class="button button--simple button--size_s" type="button">
+                Cancel
+              </button>` : `
+              <button class="button button--simple button--size_s" type="button">
+                Delete
+              </button>
+            `}
+          </div>
+          ${isNew ? '' : `
+            <button class="event-form__close-button arrow-button" type="button">
+              <span class="visually-hidden">Close</span>
             </button>
-          </div>
+          `}
         </div>
-        <fieldset class="event-form__section">
-          <legend class="event-form__section-title">Offers</legend>
-          <div class="event-form__offers">
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-1">
-              <span class="checker__label">Choose meal +€&nbsp;12</span>
-            </label>
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-2">
-              <span class="checker__label">Choose seats +€&nbsp;10</span>
-            </label>
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-1">
-              <span class="checker__label">Upgrade to comfort class +€&nbsp;60</span>
-            </label>
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-2">
-              <span class="checker__label">Upgrade to business class +€&nbsp;80</span>
-            </label>
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-1">
-              <span class="checker__label">Add luggage +€&nbsp;35</span>
-            </label>
-            <label class="checker checker--accent">
-              <input class="checker__control visually-hidden" type="checkbox" name="offers" value="offer-2">
-              <span class="checker__label">Business lounge +€&nbsp;35</span>
-            </label>
-          </div>
-        </fieldset>
+        ${createEventFormOffersTemplate(offers, event.offerIds)}
+        ${createEventFormDestinationTemplate(destination)}
       </form>
     </li>`
   );
 }
 
 export default class EventFormView {
+  constructor({ event = newEvent, destinations, offers }) {
+    this.event = event;
+    this.destinations = destinations;
+    this.offers = offers;
+  }
+
   getTemplate() {
-    return createEventFormTemplate();
+    const offersByType = this.offers[this.event.type];
+    return createEventFormTemplate(this.event, this.destinations, offersByType);
   }
 
   getElement() {
