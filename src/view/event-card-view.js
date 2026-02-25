@@ -56,25 +56,35 @@ function createEventCardTemplate({ destination, event, offers }) {
 }
 
 export default class EventCardView {
+  #element = null;
+
+  #event = null;
+  #destination = null;
+  #offers = null;
+
   constructor({ event, destination, offers }) {
-    this.event = event;
-    this.destination = destination;
-    this.offers = offers;
+    this.#event = event;
+    this.#destination = destination;
+    this.#offers = offers;
   }
 
-  getTemplate() {
+  _getTemplate() {
     return createEventCardTemplate({
-      event: this.event,
-      destination: this.destination,
-      offers: this.offers,
+      event: this.#event,
+      destination: this.#destination,
+      offers: this.#offers,
     });
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this._getTemplate());
     }
 
+    return this.#element;
+  }
+
+  getElement() {
     return this.element;
   }
 }

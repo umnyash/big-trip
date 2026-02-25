@@ -186,22 +186,32 @@ function createEventFormTemplate(event, destinations, offers) {
 }
 
 export default class EventFormView {
+  #element = null;
+
+  #event = null;
+  #destinations = null;
+  #offers = null;
+
   constructor({ event = newEvent, destinations, offers }) {
-    this.event = event;
-    this.destinations = destinations;
-    this.offers = offers;
+    this.#event = event;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
-  getTemplate() {
-    const offersByType = this.offers[this.event.type];
-    return createEventFormTemplate(this.event, this.destinations, offersByType);
+  _getTemplate() {
+    const offersByType = this.#offers[this.#event.type];
+    return createEventFormTemplate(this.#event, this.#destinations, offersByType);
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this._getTemplate());
+    }
+
+    return this.#element;
   }
 
   getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
     return this.element;
   }
 }

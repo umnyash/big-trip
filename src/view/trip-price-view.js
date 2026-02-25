@@ -5,15 +5,21 @@ function createTripPriceTemplate() {
 }
 
 export default class TripPriceView {
-  getTemplate() {
+  #element = null;
+
+  _getTemplate() {
     return createTripPriceTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this._getTemplate());
     }
 
+    return this.#element;
+  }
+
+  getElement() {
     return this.element;
   }
 }

@@ -11,45 +11,51 @@ import TripSortView from '../view/trip-sort-view.js';
 import TripTitleView from '../view/trip-title-view.js';
 
 export default class TripPresenter {
-  eventListComponent = new EventListView();
+  #headerElement = null;
+  #model = null;
+  #destinations = null;
+  #events = [];
+  #offers = null;
+
+  #eventListComponent = new EventListView();
 
   constructor({ headerElement, model }) {
-    this.headerElement = headerElement;
-    this.model = model;
+    this.#headerElement = headerElement;
+    this.#model = model;
   }
 
   init() {
-    this.destinations = this.model.getDestinations();
-    this.events = this.model.getEvents();
-    this.offers = this.model.getOffers();
+    this.#destinations = this.#model.destinations;
+    this.#events = this.#model.events;
+    this.#offers = this.#model.offers;
 
-    render(new TripTitleView(), this.headerElement);
-    render(new TripDatesView(), this.headerElement);
-    render(new TripPriceView(), this.headerElement);
-    render(new TripFilterView(), this.headerElement);
-    render(new AddEventButtonView(), this.headerElement);
-    render(this.eventListComponent, this.headerElement, RenderPosition.AFTEREND);
-    render(new TripSortView(), this.headerElement, RenderPosition.AFTEREND);
+    render(new TripTitleView(), this.#headerElement);
+    render(new TripDatesView(), this.#headerElement);
+    render(new TripPriceView(), this.#headerElement);
+    render(new TripFilterView(), this.#headerElement);
+    render(new AddEventButtonView(), this.#headerElement);
+    render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
+    render(new TripSortView(), this.#headerElement, RenderPosition.AFTEREND);
 
     render(
       new EventFormView({
-        event: this.events[0],
-        destinations: this.destinations,
-        offers: this.offers,
+        event: this.#events[0],
+        destinations: this.#destinations,
+        offers: this.#offers,
       }),
-      this.eventListComponent.getElement()
+      this.#eventListComponent.element
     );
 
-    for (let i = 1; i < this.events.length; i++) {
-      const event = this.events[i];
+    for (let i = 1; i < this.#events.length; i++) {
+      const event = this.#events[i];
 
       render(
         new EventCardView({
           event,
-          destination: this.destinations[event.destinationId],
-          offers: this.offers[event.type],
+          destination: this.#destinations[event.destinationId],
+          offers: this.#offers[event.type],
         }),
-        this.eventListComponent.getElement()
+        this.#eventListComponent.element
       );
     }
   }

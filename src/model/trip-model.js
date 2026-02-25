@@ -3,19 +3,19 @@ import { mockDestinations, mockOffers, generateMockEvents } from '../mocks';
 const SOME_EVENTS_COUNT = 4;
 
 export default class TripModel {
-  destinations = mockDestinations;
-  events = generateMockEvents(SOME_EVENTS_COUNT);
-  offers = mockOffers;
+  #destinations = mockDestinations;
+  #events = generateMockEvents(SOME_EVENTS_COUNT);
+  #offers = mockOffers;
 
-  getEvents() {
-    return this.events;
+  get events() {
+    return this.#events;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 }
