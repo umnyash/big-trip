@@ -29,6 +29,10 @@ export default class TripPresenter {
     this.#events = this.#model.events;
     this.#offers = this.#model.offers;
 
+    this.#render();
+  }
+
+  #render() {
     render(new TripTitleView(), this.#headerElement);
     render(new TripDatesView(), this.#headerElement);
     render(new TripPriceView(), this.#headerElement);
