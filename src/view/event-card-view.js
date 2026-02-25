@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 import { eventTypes } from '../data';
 import { formatTime, formatDay, getFormattedDuration } from '../utils';
 
@@ -55,14 +55,14 @@ function createEventCardTemplate({ destination, event, offers }) {
   );
 }
 
-export default class EventCardView {
-  #element = null;
-
+export default class EventCardView extends AbstractView {
   #event = null;
   #destination = null;
   #offers = null;
 
   constructor({ event, destination, offers }) {
+    super();
+
     this.#event = event;
     this.#destination = destination;
     this.#offers = offers;
@@ -74,17 +74,5 @@ export default class EventCardView {
       destination: this.#destination,
       offers: this.#offers,
     });
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createTripDatesTemplate() {
   return (
@@ -8,22 +8,8 @@ function createTripDatesTemplate() {
   );
 }
 
-export default class TripDatesView {
-  #element = null;
-
+export default class TripDatesView extends AbstractView {
   _getTemplate() {
     return createTripDatesTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }
