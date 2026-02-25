@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 import { eventTypes, eventTypeIds } from '../data';
 import { formatFullDate } from '../utils';
 
@@ -185,14 +185,14 @@ function createEventFormTemplate(event, destinations, offers) {
   );
 }
 
-export default class EventFormView {
-  #element = null;
-
+export default class EventFormView extends AbstractView {
   #event = null;
   #destinations = null;
   #offers = null;
 
   constructor({ event = newEvent, destinations, offers }) {
+    super();
+
     this.#event = event;
     this.#destinations = destinations;
     this.#offers = offers;
@@ -201,17 +201,5 @@ export default class EventFormView {
   _getTemplate() {
     const offersByType = this.#offers[this.#event.type];
     return createEventFormTemplate(this.#event, this.#destinations, offersByType);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

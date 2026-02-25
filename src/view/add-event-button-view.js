@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createAddEventButtonTemplate() {
   return (
@@ -12,22 +12,8 @@ function createAddEventButtonTemplate() {
   );
 }
 
-export default class AddEventButtonView {
-  #element = null;
-
+export default class AddEventButtonView extends AbstractView {
   _getTemplate() {
     return createAddEventButtonTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createTripSortTemplate() {
   return (
@@ -25,22 +25,8 @@ function createTripSortTemplate() {
   );
 }
 
-export default class TripSortView {
-  #element = null;
-
+export default class TripSortView extends AbstractView {
   _getTemplate() {
     return createTripSortTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }
