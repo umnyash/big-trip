@@ -59,13 +59,18 @@ export default class EventCardView extends AbstractView {
   #event = null;
   #destination = null;
   #offers = null;
+  #onEditButtonClick = null;
 
-  constructor({ event, destination, offers }) {
+  constructor({ event, destination, offers, onEditButtonClick }) {
     super();
 
     this.#event = event;
     this.#destination = destination;
     this.#offers = offers;
+    this.#onEditButtonClick = onEditButtonClick;
+
+    this.element.querySelector('.event-card__edit-button')
+      .addEventListener('click', this.#editButtonClickHandler);
   }
 
   _getTemplate() {
@@ -75,4 +80,8 @@ export default class EventCardView extends AbstractView {
       offers: this.#offers,
     });
   }
+
+  #editButtonClickHandler = () => {
+    this.#onEditButtonClick();
+  };
 }

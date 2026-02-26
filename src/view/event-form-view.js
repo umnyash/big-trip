@@ -171,7 +171,7 @@ function createEventFormTemplate(event, destinations, offers) {
               Save
             </button>
             ${isNew ? `
-              <button class="button button--simple button--size_s" type="button">
+              <button class="event-form__cancel-button button button--simple button--size_s" type="button">
                 Cancel
               </button>` : `
               <button class="button button--simple button--size_s" type="button">
@@ -196,17 +196,26 @@ export default class EventFormView extends AbstractView {
   #event = null;
   #destinations = null;
   #offers = null;
+  #onCloseButtonClick = null;
 
-  constructor({ event = newEvent, destinations, offers }) {
+  constructor({ event = newEvent, destinations, offers, onCloseButtonClick }) {
     super();
 
     this.#event = event;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#onCloseButtonClick = onCloseButtonClick;
+
+    this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
+      .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
   }
 
   _getTemplate() {
     const offersOfType = this.#offers[this.#event.type];
     return createEventFormTemplate(this.#event, this.#destinations, offersOfType);
   }
+
+  #closeButtonClickHandler = () => {
+    this.#onCloseButtonClick();
+  };
 }

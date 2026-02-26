@@ -1,4 +1,5 @@
-import { RenderPosition, render } from '../framework';
+import { RenderPosition, render, replace } from '../framework';
+import { isEscapeEvent } from '../utils';
 
 import AddEventButtonView from '../view/add-event-button-view.js';
 import EventFormView from '../view/event-form-view.js';
@@ -34,14 +35,42 @@ export default class TripPresenter {
   }
 
   #renderEvent(event) {
-    render(
-      new EventCardView({
-        event,
-        destination: this.#destinations[event.destinationId],
-        offers: this.#offers[event.type],
-      }),
-      this.#eventListComponent.element
-    );
+    const documentKeyDownHandler = (evt) => {
+      if (isEscapeEvent(evt)) {
+        evt.preventDefault();
+        exitEditMode();
+      }
+    };
+
+    const eventCardComponent = new EventCardView({
+      event,
+      destination: this.#destinations[event.destinationId],
+      offers: this.#offers[event.type],
+      onEditButtonClick: () => {
+        enterEditMode();
+      },
+    });
+
+    const eventFormComponent = new EventFormView({
+      event,
+      destinations: this.#destinations,
+      offers: this.#offers,
+      onCloseButtonClick: () => {
+        exitEditMode();
+      },
+    });
+
+    function enterEditMode() {
+      replace(eventFormComponent, eventCardComponent);
+      document.addEventListener('keydown', documentKeyDownHandler);
+    }
+
+    function exitEditMode() {
+      replace(eventCardComponent, eventFormComponent);
+      document.removeEventListener('keydown', documentKeyDownHandler);
+    }
+
+    render(eventCardComponent, this.#eventListComponent.element);
   }
 
   #render() {
@@ -65,18 +94,6 @@ export default class TripPresenter {
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
     render(new TripSortView(), this.#headerElement, RenderPosition.AFTEREND);
-
-    render(
-      new EventFormView({
-        event: this.#events[0],
-        destinations: this.#destinations,
-        offers: this.#offers,
-      }),
-      this.#eventListComponent.element
-    );
-
-    for (let i = 1; i < this.#events.length; i++) {
-      this.#renderEvent(this.#events[i]);
-    }
+    this.#events.forEach((event) => this.#renderEvent(event));
   }
 }
