@@ -38,4 +38,26 @@ function render(component, element, position = RenderPosition.BEFOREEND) {
   element.insertAdjacentElement(position, component.element);
 }
 
-export { RenderPosition, createElement, render };
+/**
+ * Функция для замены одного компонента на другой
+ * @param {AbstractView} newComponent Компонент, которым нужно заменить
+ * @param {AbstractView} oldComponent Компонент, который нужно заменить
+ */
+function replace(newComponent, oldComponent) {
+  if (!(newComponent instanceof AbstractView && oldComponent instanceof AbstractView)) {
+    throw new Error('Can replace only components');
+  }
+
+  const newElement = newComponent.element;
+  const oldElement = oldComponent.element;
+
+  const parent = oldElement.parentElement;
+
+  if (parent === null) {
+    throw new Error('Parent element doesn\'t exist');
+  }
+
+  parent.replaceChild(newElement, oldElement);
+}
+
+export { RenderPosition, createElement, render, replace };
