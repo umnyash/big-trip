@@ -33,6 +33,17 @@ export default class TripPresenter {
     this.#render();
   }
 
+  #renderEvent(event) {
+    render(
+      new EventCardView({
+        event,
+        destination: this.#destinations[event.destinationId],
+        offers: this.#offers[event.type],
+      }),
+      this.#eventListComponent.element
+    );
+  }
+
   #render() {
     if (!this.#events.length) {
       render(new TripFilterView(), this.#headerElement);
@@ -65,16 +76,7 @@ export default class TripPresenter {
     );
 
     for (let i = 1; i < this.#events.length; i++) {
-      const event = this.#events[i];
-
-      render(
-        new EventCardView({
-          event,
-          destination: this.#destinations[event.destinationId],
-          offers: this.#offers[event.type],
-        }),
-        this.#eventListComponent.element
-      );
+      this.#renderEvent(this.#events[i]);
     }
   }
 }
