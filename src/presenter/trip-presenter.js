@@ -9,6 +9,7 @@ import TripFilterView from '../view/trip-filter-view.js';
 import TripPriceView from '../view/trip-price-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import TripTitleView from '../view/trip-title-view.js';
+import TripMessage, { MessageVariant } from '../view/trip-message-view.js';
 
 export default class TripPresenter {
   #headerElement = null;
@@ -33,6 +34,19 @@ export default class TripPresenter {
   }
 
   #render() {
+    if (!this.#events.length) {
+      render(new TripFilterView(), this.#headerElement);
+      render(new AddEventButtonView(), this.#headerElement);
+
+      render(
+        new TripMessage({ variant: MessageVariant.NoEvents }),
+        this.#headerElement,
+        RenderPosition.AFTEREND
+      );
+
+      return;
+    }
+
     render(new TripTitleView(), this.#headerElement);
     render(new TripDatesView(), this.#headerElement);
     render(new TripPriceView(), this.#headerElement);
