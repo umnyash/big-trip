@@ -1,9 +1,7 @@
-import { RenderPosition, render, replace } from '../framework';
-import { isEscapeEvent } from '../utils';
+import { RenderPosition, render } from '../framework';
 
+import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
-import EventFormView from '../view/event-form-view.js';
-import EventCardView from '../view/event-card-view.js';
 import EventListView from '../view/event-list-view.js';
 import TripDatesView from '../view/trip-dates-view.js';
 import TripFilterView from '../view/trip-filter-view.js';
@@ -35,42 +33,13 @@ export default class TripPresenter {
   }
 
   #renderEvent(event) {
-    const documentKeyDownHandler = (evt) => {
-      if (isEscapeEvent(evt)) {
-        evt.preventDefault();
-        exitEditMode();
-      }
-    };
-
-    const eventCardComponent = new EventCardView({
-      event,
-      destination: this.#destinations[event.destinationId],
-      offers: this.#offers[event.type],
-      onEditButtonClick: () => {
-        enterEditMode();
-      },
-    });
-
-    const eventFormComponent = new EventFormView({
-      event,
+    const eventPresenter = new EventPresenter({
+      containerElement: this.#eventListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
-      onCloseButtonClick: () => {
-        exitEditMode();
-      },
     });
 
-    function enterEditMode() {
-      replace(eventFormComponent, eventCardComponent);
-      document.addEventListener('keydown', documentKeyDownHandler);
-    }
-
-    function exitEditMode() {
-      replace(eventCardComponent, eventFormComponent);
-      document.removeEventListener('keydown', documentKeyDownHandler);
-    }
-
-    render(eventCardComponent, this.#eventListComponent.element);
+    eventPresenter.init(event);
   }
 
   #render() {
