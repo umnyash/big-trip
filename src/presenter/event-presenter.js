@@ -20,37 +20,49 @@ export default class EventPresenter {
 
   init(event) {
     this.#event = event;
-
-    this.#cardComponent = new EventCardView({
-      event: this.#event,
-      destination: this.#destinations[this.#event.destinationId],
-      offers: this.#offers[this.#event.type],
-      onEditButtonClick: () => {
-        this.#enterEditMode();
-      },
-    });
-
-    this.#formComponent = new EventFormView({
-      event: this.#event,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      onCloseButtonClick: () => {
-        this.#exitEditMode();
-      },
-    });
-
+    this.#cardComponent = this.#createCardComponent();
     render(this.#cardComponent, this.#containerElement);
   }
 
+  #createCardComponent() {
+    return new EventCardView({
+      event: this.#event,
+      destination: this.#destinations[this.#event.destinationId],
+      offers: this.#offers[this.#event.type],
+      onEditButtonClick: this.#cardEditButtonClickHandler,
+    });
+  }
+
+  #createFormComponent() {
+    return new EventFormView({
+      event: this.#event,
+      destinations: this.#destinations,
+      offers: this.#offers,
+      onCloseButtonClick: this.#formCloseButtonClickHandler,
+    });
+  }
+
   #enterEditMode() {
+    this.#formComponent = this.#createFormComponent();
     replace(this.#formComponent, this.#cardComponent);
     document.addEventListener('keydown', this.#documentKeyDownHandler);
+    this.#cardComponent = null;
   }
 
   #exitEditMode() {
+    this.#cardComponent = this.#createCardComponent();
     replace(this.#cardComponent, this.#formComponent);
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    this.#formComponent = null;
   }
+
+  #cardEditButtonClickHandler = () => {
+    this.#enterEditMode();
+  };
+
+  #formCloseButtonClickHandler = () => {
+    this.#exitEditMode();
+  };
 
   #documentKeyDownHandler = (evt) => {
     if (isEscapeEvent(evt)) {
