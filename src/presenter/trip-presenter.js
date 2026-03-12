@@ -18,6 +18,7 @@ export default class TripPresenter {
   #offers = null;
 
   #eventListComponent = new EventListView();
+  #editingEventPresenter = null;
 
   constructor({ headerElement, model }) {
     this.#headerElement = headerElement;
@@ -37,6 +38,8 @@ export default class TripPresenter {
       containerElement: this.#eventListComponent.element,
       destinations: this.#destinations,
       offers: this.#offers,
+      onEventEnterEditMode: this.#eventEnterEditModeHandler,
+      onEventExitEditMode: this.#eventExitEditModeHandler,
     });
 
     eventPresenter.init(event);
@@ -63,4 +66,13 @@ export default class TripPresenter {
     render(new TripSortView(), this.#headerElement, RenderPosition.AFTEREND);
     this.#events.forEach((event) => this.#renderEvent(event));
   }
+
+  #eventEnterEditModeHandler = (eventPresenter) => {
+    this.#editingEventPresenter?.exitEditMode();
+    this.#editingEventPresenter = eventPresenter;
+  };
+
+  #eventExitEditModeHandler = () => {
+    this.#editingEventPresenter = null;
+  };
 }
