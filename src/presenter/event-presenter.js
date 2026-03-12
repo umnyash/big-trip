@@ -7,15 +7,25 @@ export default class EventPresenter {
   #containerElement = null;
   #destinations = [];
   #offers = [];
+  #onEventEnterEditMode = null;
+  #onEventExitEditMode = null;
 
   #event = null;
   #cardComponent = null;
   #formComponent = null;
 
-  constructor({ containerElement, destinations, offers }) {
+  constructor({
+    containerElement,
+    destinations,
+    offers,
+    onEventEnterEditMode,
+    onEventExitEditMode,
+  }) {
     this.#containerElement = containerElement;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#onEventEnterEditMode = onEventEnterEditMode;
+    this.#onEventExitEditMode = onEventExitEditMode;
   }
 
   init(event) {
@@ -47,13 +57,15 @@ export default class EventPresenter {
     replace(this.#formComponent, this.#cardComponent);
     document.addEventListener('keydown', this.#documentKeyDownHandler);
     this.#cardComponent = null;
+    this.#onEventEnterEditMode(this);
   }
 
-  #exitEditMode() {
+  exitEditMode() {
     this.#cardComponent = this.#createCardComponent();
     replace(this.#cardComponent, this.#formComponent);
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
     this.#formComponent = null;
+    this.#onEventExitEditMode();
   }
 
   #cardEditButtonClickHandler = () => {
@@ -61,13 +73,13 @@ export default class EventPresenter {
   };
 
   #formCloseButtonClickHandler = () => {
-    this.#exitEditMode();
+    this.exitEditMode();
   };
 
   #documentKeyDownHandler = (evt) => {
     if (isEscapeEvent(evt)) {
       evt.preventDefault();
-      this.#exitEditMode();
+      this.exitEditMode();
     }
   };
 }
