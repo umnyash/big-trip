@@ -1,4 +1,5 @@
 import { RenderPosition, render } from '../framework';
+import { SortType } from '../constants.js';
 
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
@@ -17,7 +18,10 @@ export default class TripPresenter {
   #events = [];
   #offers = null;
 
+  #sortComponent = null;
   #eventListComponent = new EventListView();
+
+  #sortType = SortType.DATE_ASC;
   #editingEventPresenter = null;
 
   constructor({ headerElement, model }) {
@@ -31,6 +35,15 @@ export default class TripPresenter {
     this.#offers = this.#model.offers;
 
     this.#render();
+  }
+
+  #renderSort() {
+    this.#sortComponent = new TripSortView({
+      value: this.#sortType,
+      onValueChange: this.#sortChangeHandler,
+    });
+
+    render(this.#sortComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 
   #renderEvent(event) {
@@ -65,9 +78,13 @@ export default class TripPresenter {
     render(new TripFilterView(), this.#headerElement);
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
-    render(new TripSortView(), this.#headerElement, RenderPosition.AFTEREND);
+    this.#renderSort();
     this.#events.forEach((event) => this.#renderEvent(event));
   }
+
+  #sortChangeHandler = (value) => {
+    this.#sortType = value;
+  };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
     this.#editingEventPresenter?.exitEditMode();
