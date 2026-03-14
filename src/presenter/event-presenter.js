@@ -1,4 +1,4 @@
-import { render, replace } from '../framework';
+import { render, replace, remove } from '../framework';
 import { isEscapeEvent } from '../utils';
 import EventCardView from '../view/event-card-view.js';
 import EventFormView from '../view/event-form-view.js';
@@ -66,6 +66,12 @@ export default class EventPresenter {
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
     this.#formComponent = null;
     this.#onEventExitEditMode();
+  }
+
+  destroy() {
+    document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    remove(this.#cardComponent);
+    remove(this.#formComponent);
   }
 
   #cardEditButtonClickHandler = () => {

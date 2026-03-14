@@ -23,6 +23,7 @@ export default class TripPresenter {
   #eventListComponent = new EventListView();
 
   #sortType = SortType.DATE_ASC;
+  #eventPresenters = new Map();
   #editingEventPresenter = null;
 
   constructor({ headerElement, model }) {
@@ -57,7 +58,12 @@ export default class TripPresenter {
       onEventExitEditMode: this.#eventExitEditModeHandler,
     });
 
+    this.#eventPresenters.set(event.id, eventPresenter);
     eventPresenter.init(event);
+  }
+
+  #renderEvents() {
+    this.#events.forEach((event) => this.#renderEvent(event));
   }
 
   #render() {
@@ -81,7 +87,13 @@ export default class TripPresenter {
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
     this.#renderSort();
-    this.#events.forEach((event) => this.#renderEvent(event));
+    this.#renderEvents();
+  }
+
+  #clearEvents() {
+    this.#eventPresenters.forEach((presenter) => presenter.destroy());
+    this.#eventPresenters.clear();
+    this.#editingEventPresenter = null;
   }
 
   #sortEvents() {
@@ -90,6 +102,9 @@ export default class TripPresenter {
 
   #sortChangeHandler = (value) => {
     this.#sortType = value;
+    this.#sortEvents();
+    this.#clearEvents();
+    this.#renderEvents();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
