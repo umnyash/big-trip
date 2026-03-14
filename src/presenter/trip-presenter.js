@@ -1,6 +1,6 @@
 import { RenderPosition, render } from '../framework';
 import { SortType } from '../constants.js';
-import { sortEventsBy } from '../utils';
+import { sortEventsBy, updateArrayItemById } from '../utils';
 
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
@@ -56,6 +56,7 @@ export default class TripPresenter {
       offers: this.#offers,
       onEventEnterEditMode: this.#eventEnterEditModeHandler,
       onEventExitEditMode: this.#eventExitEditModeHandler,
+      onDataChange: this.#eventChangeHandler,
     });
 
     this.#eventPresenters.set(event.id, eventPresenter);
@@ -103,6 +104,11 @@ export default class TripPresenter {
     this.#sortEvents();
     this.#clearEvents();
     this.#renderEvents();
+  };
+
+  #eventChangeHandler = (updatedEvent) => {
+    updateArrayItemById(this.#events, updatedEvent);
+    this.#eventPresenters.get(updatedEvent.id).init(updatedEvent);
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
