@@ -30,8 +30,15 @@ export default class EventPresenter {
 
   init(event) {
     this.#event = event;
-    this.#cardComponent = this.#createCardComponent();
-    render(this.#cardComponent, this.#containerElement);
+    const newCardComponent = this.#createCardComponent();
+
+    if (this.#cardComponent) {
+      replace(newCardComponent, this.#cardComponent);
+    } else {
+      render(newCardComponent, this.#containerElement);
+    }
+
+    this.#cardComponent = newCardComponent;
   }
 
   #createCardComponent() {
