@@ -60,4 +60,21 @@ function replace(newComponent, oldComponent) {
   parentElement.replaceChild(newElement, oldElement);
 }
 
-export { RenderPosition, createElement, render, replace };
+/**
+ * Функция для удаления компонента
+ * @param {AbstractView} component Компонент, который нужно удалить
+ */
+function remove(component) {
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.element.remove();
+  component.removeElement();
+}
+
+export { RenderPosition, createElement, render, replace, remove };
