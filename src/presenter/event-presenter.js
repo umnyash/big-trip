@@ -9,6 +9,7 @@ export default class EventPresenter {
   #offers = [];
   #onEventEnterEditMode = null;
   #onEventExitEditMode = null;
+  #onEventUpdate = null;
 
   #event = null;
   #cardComponent = null;
@@ -20,12 +21,14 @@ export default class EventPresenter {
     offers,
     onEventEnterEditMode,
     onEventExitEditMode,
+    onEventUpdate,
   }) {
     this.#containerElement = containerElement;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onEventEnterEditMode = onEventEnterEditMode;
     this.#onEventExitEditMode = onEventExitEditMode;
+    this.#onEventUpdate = onEventUpdate;
   }
 
   init(event) {
@@ -47,6 +50,7 @@ export default class EventPresenter {
       destination: this.#destinations[this.#event.destinationId],
       offers: this.#offers[this.#event.type],
       onEditButtonClick: this.#cardEditButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
     });
   }
 
@@ -87,6 +91,13 @@ export default class EventPresenter {
 
   #formCloseButtonClickHandler = () => {
     this.exitEditMode();
+  };
+
+  #favoriteButtonClickHandler = () => {
+    this.#onEventUpdate({
+      ...this.#event,
+      isFavorite: !this.#event.isFavorite,
+    });
   };
 
   #documentKeyDownHandler = (evt) => {
