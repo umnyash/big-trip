@@ -51,4 +51,4 @@ function getFormattedDuration(startDate, endDate) {
   return formatDuration(calcDuration(startDate, endDate));
 }
 
-export { formatTime, formatDay, formatFullDate, getFormattedDuration };
+export { calcDuration, formatTime, formatDay, formatFullDate, getFormattedDuration };
