@@ -1,5 +1,6 @@
 import { RenderPosition, render } from '../framework';
 import { SortType } from '../constants.js';
+import { sortEventsBy } from '../utils';
 
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
@@ -34,6 +35,7 @@ export default class TripPresenter {
     this.#events = this.#model.events;
     this.#offers = this.#model.offers;
 
+    this.#sortEvents();
     this.#render();
   }
 
@@ -78,6 +80,10 @@ export default class TripPresenter {
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
     this.#renderSort();
     this.#events.forEach((event) => this.#renderEvent(event));
+  }
+
+  #sortEvents() {
+    this.#events = sortEventsBy(this.#events, this.#sortType);
   }
 
   #sortChangeHandler = (value) => {
