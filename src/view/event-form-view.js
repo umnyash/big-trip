@@ -1,4 +1,4 @@
-import { AbstractView } from '../framework';
+import { AbstractStatefulView } from '../framework';
 import { eventTypes, eventTypeIds } from '../data';
 import { formatFullDate } from '../utils';
 
@@ -129,8 +129,8 @@ function createEventFormDestinationTemplate(destination) {
   );
 }
 
-function createEventFormTemplate(event, destinations, offers) {
-  const { id, type, destinationId, startDate, endDate, basePrice } = event;
+function createEventFormTemplate(state, destinations, offers) {
+  const { id, type, destinationId, startDate, endDate, basePrice } = state;
   const isNew = !id;
 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
@@ -185,15 +185,14 @@ function createEventFormTemplate(event, destinations, offers) {
             </button>
           `}
         </div>
-        ${createEventFormOffersTemplate(offers, event.offerIds)}
+        ${createEventFormOffersTemplate(offers, state.offerIds)}
         ${createEventFormDestinationTemplate(destination)}
       </form>
     </li>`
   );
 }
 
-export default class EventFormView extends AbstractView {
-  #event = null;
+export default class EventFormView extends AbstractStatefulView {
   #destinations = null;
   #offers = null;
   #onCloseButtonClick = null;
@@ -201,18 +200,22 @@ export default class EventFormView extends AbstractView {
   constructor({ event = newEvent, destinations, offers, onCloseButtonClick }) {
     super();
 
-    this.#event = event;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onCloseButtonClick = onCloseButtonClick;
 
-    this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
-      .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
+    this._updateState(event);
+    this._setHandlers();
   }
 
   _getTemplate() {
-    const offersOfType = this.#offers[this.#event.type];
-    return createEventFormTemplate(this.#event, this.#destinations, offersOfType);
+    const offersOfType = this.#offers[this._state.type];
+    return createEventFormTemplate(this._state, this.#destinations, offersOfType);
+  }
+
+  _setHandlers() {
+    this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
+      .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
   }
 
   #closeButtonClickHandler = () => {
