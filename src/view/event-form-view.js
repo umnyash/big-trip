@@ -14,10 +14,14 @@ const newEvent = {
   offerIds: [],
 };
 
-function createEventFormTypeDropdownTemplate(selectedTypeId) {
+function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen) {
   return (
     `<div class="event-form__type-dropdown dropdown">
-      <button class="dropdown__toggle-button dropdown__toggle-button--icon" type="button" aria-expanded="false">
+      <button
+        class="dropdown__toggle-button dropdown__toggle-button--icon"
+        type="button"
+        aria-expanded="${isTypeDropdownOpen}"
+      >
         <span class="visually-hidden">Event type:</span>
         <span class="dropdown__toggle-icon event-icon event-icon--accent">
           <img class="event-icon__image" src="${eventTypes[selectedTypeId].iconUrl}" width="18" height="18" aria-labelledby="event-form-type">
@@ -130,7 +134,7 @@ function createEventFormDestinationTemplate(destination) {
 }
 
 function createEventFormTemplate(state, destinations, offers) {
-  const { id, type, destinationId, startDate, endDate, basePrice } = state;
+  const { id, type, destinationId, startDate, endDate, basePrice, isTypeDropdownOpen } = state;
   const isNew = !id;
 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
@@ -144,7 +148,7 @@ function createEventFormTemplate(state, destinations, offers) {
       <form class="event-list__form event-form" action="https://echo.htmlacademy.ru" method="post">
         <div class="event-form__header">
           <h3 class="visually-hidden">${formTitle}</h3>
-          ${createEventFormTypeDropdownTemplate(type)}
+          ${createEventFormTypeDropdownTemplate(type, isTypeDropdownOpen)}
           <div class="event-form__field-wrapper event-form__field-wrapper--title">
             <span id="event-form-type">${typeTitle}</span>
             ${createEventFormDestinationFieldTemplate(destinations, destination?.name, id)}
@@ -204,8 +208,13 @@ export default class EventFormView extends AbstractStatefulView {
     this.#offers = offers;
     this.#onCloseButtonClick = onCloseButtonClick;
 
-    this._updateState(event);
+    this._updateState(EventFormView.#createInitialState(event));
     this._setHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+    document.removeEventListener('click', this.#documentClickHandler);
   }
 
   _getTemplate() {
@@ -214,11 +223,55 @@ export default class EventFormView extends AbstractStatefulView {
   }
 
   _setHandlers() {
+    this.element.querySelector('.dropdown__toggle-button')
+      .addEventListener('click', this.#typeDropdownButtonClickHandler);
+
+    if (this._state.isTypeDropdownOpen) {
+      document.addEventListener('click', this.#documentClickHandler);
+    }
+
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
   }
 
+  #openTypeDropdown(buttonElement) {
+    this._updateState({ isTypeDropdownOpen: true });
+    buttonElement.ariaExpanded = this._state.isTypeDropdownOpen;
+    document.addEventListener('click', this.#documentClickHandler);
+  }
+
+  #closeTypeDropdown(buttonElement) {
+    document.removeEventListener('click', this.#documentClickHandler);
+    this._updateState({ isTypeDropdownOpen: false });
+    buttonElement.ariaExpanded = this._state.isTypeDropdownOpen;
+  }
+
+  #typeDropdownButtonClickHandler = (evt) => {
+    if (this._state.isTypeDropdownOpen) {
+      this.#closeTypeDropdown(evt.currentTarget);
+    } else {
+      this.#openTypeDropdown(evt.currentTarget);
+    }
+  };
+
   #closeButtonClickHandler = () => {
     this.#onCloseButtonClick();
   };
+
+  #documentClickHandler = (evt) => {
+    const dropdownElement = this.element.querySelector('.dropdown');
+
+    if (dropdownElement.contains(evt.target)) {
+      return;
+    }
+
+    this.#closeTypeDropdown(dropdownElement.querySelector('.dropdown__toggle-button'));
+  };
+
+  static #createInitialState(event) {
+    return {
+      ...event,
+      isTypeDropdownOpen: false,
+    };
+  }
 }
