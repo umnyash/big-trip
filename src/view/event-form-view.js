@@ -50,7 +50,7 @@ function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen)
   );
 }
 
-function createEventFormDestinationFieldTemplate(destinations, value = '', eventId) {
+function createEventFormDestinationFieldTemplate(destinationNames, value = '', eventId) {
   const dataListId = `${eventId ? `event-${eventId}` : 'new-event'}-destinations-data-list`;
 
   return (
@@ -65,7 +65,7 @@ function createEventFormDestinationFieldTemplate(destinations, value = '', event
         required
       >
       <datalist id="${dataListId}">
-        ${Object.values(destinations).map(({ name }) => `
+        ${destinationNames.map((name) => `
           <option value="${name}"></option>
         `).join('')}
       </datalist>
@@ -133,11 +133,11 @@ function createEventFormDestinationTemplate(destination) {
   );
 }
 
-function createEventFormTemplate(state, destinations, offers) {
+function createEventFormTemplate({ state, destinationNames, destination, offers }) {
   const {
     id,
     type,
-    destinationId,
+    destinationFieldValue,
     startDate,
     endDate,
     basePrice,
@@ -151,7 +151,6 @@ function createEventFormTemplate(state, destinations, offers) {
   const typeTitle = eventTypes[type].title;
   const formattedStartDate = startDate ? formatFullDate(startDate) : '';
   const formattedEndDate = endDate ? formatFullDate(endDate) : '';
-  const destination = destinations[destinationId];
   const selectedOfferIds = selectedOfferIdsByType[type];
 
   return (
@@ -162,7 +161,7 @@ function createEventFormTemplate(state, destinations, offers) {
           ${createEventFormTypeDropdownTemplate(type, isTypeDropdownOpen)}
           <div class="event-form__field-wrapper event-form__field-wrapper--title">
             <span id="event-form-type">${typeTitle}</span>
-            ${createEventFormDestinationFieldTemplate(destinations, destination?.name, id)}
+            ${createEventFormDestinationFieldTemplate(destinationNames, destinationFieldValue, id)}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--dates">
             <label class="event-form__field">
@@ -212,6 +211,9 @@ export default class EventFormView extends AbstractStatefulView {
   #offers = null;
   #onCloseButtonClick = null;
 
+  #destinationNameToIdMap = null;
+  #destinationNames = null;
+
   constructor({ event = newEvent, destinations, offers, onCloseButtonClick }) {
     super();
 
@@ -219,7 +221,15 @@ export default class EventFormView extends AbstractStatefulView {
     this.#offers = offers;
     this.#onCloseButtonClick = onCloseButtonClick;
 
-    this._updateState(EventFormView.#createInitialState(event));
+    const {
+      destinationNameToIdMap,
+      destinationNames,
+    } = EventFormView.#createDestinationIndexes(this.#destinations);
+
+    this.#destinationNameToIdMap = destinationNameToIdMap;
+    this.#destinationNames = destinationNames;
+
+    this._updateState(EventFormView.#createInitialState(event, this.#destinations));
     this._setHandlers();
   }
 
@@ -229,8 +239,16 @@ export default class EventFormView extends AbstractStatefulView {
   }
 
   _getTemplate() {
+    const destinationId = this.#getDestinationIdByName(this._state.destinationFieldValue);
+    const destination = this.#destinations[destinationId];
     const offersOfType = this.#offers[this._state.type];
-    return createEventFormTemplate(this._state, this.#destinations, offersOfType);
+
+    return createEventFormTemplate({
+      state: this._state,
+      destinationNames: this.#destinationNames,
+      destination,
+      offers: offersOfType,
+    });
   }
 
   _setHandlers() {
@@ -245,6 +263,9 @@ export default class EventFormView extends AbstractStatefulView {
       document.addEventListener('click', this.#documentClickHandler);
     }
 
+    this.element.querySelector('[name="destination"]')
+      .addEventListener('input', this.#destinationFieldInputHandler);
+
     this.element.querySelector('[name="base-price"]')
       .addEventListener('input', this.#basePriceFieldInputHandler);
 
@@ -253,6 +274,10 @@ export default class EventFormView extends AbstractStatefulView {
 
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
+  }
+
+  #getDestinationIdByName(name) {
+    return this.#destinationNameToIdMap[name.trim().toLowerCase()] ?? null;
   }
 
   #openTypeDropdown(buttonElement) {
@@ -278,6 +303,22 @@ export default class EventFormView extends AbstractStatefulView {
   #typeDropdownChangeHandler = ({ target: { value } }) => {
     this.updateElement({ type: value });
     this.element.querySelector('[name="type"]:checked').focus();
+  };
+
+  #destinationFieldInputHandler = ({ target: { value } }) => {
+    const currentDestinationId = this.#getDestinationIdByName(this._state.destinationFieldValue);
+    const newDestinationId = this.#getDestinationIdByName(value);
+
+    if (newDestinationId === currentDestinationId) {
+      this._updateState({ destinationFieldValue: value });
+      return;
+    }
+
+    const destinationFieldValue = newDestinationId
+      ? this.#destinations[newDestinationId].name
+      : value;
+
+    this.updateElement({ destinationFieldValue });
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
@@ -315,14 +356,28 @@ export default class EventFormView extends AbstractStatefulView {
     this.#closeTypeDropdown(dropdownElement.querySelector('.dropdown__toggle-button'));
   };
 
-  static #createInitialState(event) {
+  static #createDestinationIndexes(destinations) {
+    const destinationNameToIdMap = {};
+    const destinationNames = [];
+
+    Object.entries(destinations).forEach(([id, { name }]) => {
+      destinationNameToIdMap[name.toLowerCase()] = id;
+      destinationNames.push(name);
+    });
+
+    return { destinationNameToIdMap, destinationNames };
+  }
+
+  static #createInitialState(event, destinations) {
     const state = {
       ...event,
+      destinationFieldValue: destinations[event.destinationId]?.name ?? '',
       selectedOfferIdsByType: { [event.type]: new Set(event.offerIds) },
       isTypeDropdownOpen: false,
     };
 
     delete state.offerIds;
+    delete state.destinationId;
 
     return state;
   }
