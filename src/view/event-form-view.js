@@ -223,8 +223,12 @@ export default class EventFormView extends AbstractStatefulView {
   }
 
   _setHandlers() {
-    this.element.querySelector('.dropdown__toggle-button')
+    const typeDropdownElement = this.element.querySelector('.event-form__type-dropdown');
+
+    typeDropdownElement.querySelector('.dropdown__toggle-button')
       .addEventListener('click', this.#typeDropdownButtonClickHandler);
+
+    typeDropdownElement.addEventListener('change', this.#typeDropdownChangeHandler);
 
     if (this._state.isTypeDropdownOpen) {
       document.addEventListener('click', this.#documentClickHandler);
@@ -255,6 +259,10 @@ export default class EventFormView extends AbstractStatefulView {
     } else {
       this.#openTypeDropdown(evt.currentTarget);
     }
+  };
+
+  #typeDropdownChangeHandler = ({ target: { value } }) => {
+    this.updateElement({ type: value });
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
