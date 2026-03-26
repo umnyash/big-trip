@@ -230,6 +230,9 @@ export default class EventFormView extends AbstractStatefulView {
       document.addEventListener('click', this.#documentClickHandler);
     }
 
+    this.element.querySelector('[name="base-price"]')
+      .addEventListener('input', this.#basePriceFieldInputHandler);
+
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
   }
@@ -252,6 +255,10 @@ export default class EventFormView extends AbstractStatefulView {
     } else {
       this.#openTypeDropdown(evt.currentTarget);
     }
+  };
+
+  #basePriceFieldInputHandler = ({ target: { value } }) => {
+    this._updateState({ basePrice: value });
   };
 
   #closeButtonClickHandler = () => {
