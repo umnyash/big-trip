@@ -91,7 +91,7 @@ function createEventFormOffersTemplate(offers, selectedOfferIds) {
               type="checkbox"
               name="offer-ids"
               value="${id}"
-              ${selectedOfferIds.includes(id) ? 'checked' : ''}
+              ${selectedOfferIds?.has(id) ? 'checked' : ''}
             >
             <span class="checker__label">
               ${offers[id].title} +&#8288;€&nbsp;${offers[id].price}
@@ -134,7 +134,17 @@ function createEventFormDestinationTemplate(destination) {
 }
 
 function createEventFormTemplate(state, destinations, offers) {
-  const { id, type, destinationId, startDate, endDate, basePrice, isTypeDropdownOpen } = state;
+  const {
+    id,
+    type,
+    destinationId,
+    startDate,
+    endDate,
+    basePrice,
+    selectedOfferIdsByType,
+    isTypeDropdownOpen,
+  } = state;
+
   const isNew = !id;
 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
@@ -142,6 +152,7 @@ function createEventFormTemplate(state, destinations, offers) {
   const formattedStartDate = startDate ? formatFullDate(startDate) : '';
   const formattedEndDate = endDate ? formatFullDate(endDate) : '';
   const destination = destinations[destinationId];
+  const selectedOfferIds = selectedOfferIdsByType[type];
 
   return (
     `<li class="event-list__item">
@@ -189,7 +200,7 @@ function createEventFormTemplate(state, destinations, offers) {
             </button>
           `}
         </div>
-        ${createEventFormOffersTemplate(offers, state.offerIds)}
+        ${createEventFormOffersTemplate(offers, selectedOfferIds)}
         ${createEventFormDestinationTemplate(destination)}
       </form>
     </li>`
@@ -237,6 +248,9 @@ export default class EventFormView extends AbstractStatefulView {
     this.element.querySelector('[name="base-price"]')
       .addEventListener('input', this.#basePriceFieldInputHandler);
 
+    this.element.querySelector('.event-form__offers')
+      ?.addEventListener('change', this.#offersChangeHandler);
+
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
   }
@@ -270,6 +284,23 @@ export default class EventFormView extends AbstractStatefulView {
     this._updateState({ basePrice: value });
   };
 
+  #offersChangeHandler = ({ target: { value, checked } }) => {
+    const selectedOfferIds = new Set(this._state.selectedOfferIdsByType[this._state.type]);
+
+    if (checked) {
+      selectedOfferIds.add(value);
+    } else {
+      selectedOfferIds.delete(value);
+    }
+
+    this._updateState({
+      selectedOfferIdsByType: {
+        ...this._state.selectedOfferIdsByType,
+        [this._state.type]: selectedOfferIds,
+      },
+    });
+  };
+
   #closeButtonClickHandler = () => {
     this.#onCloseButtonClick();
   };
@@ -285,9 +316,14 @@ export default class EventFormView extends AbstractStatefulView {
   };
 
   static #createInitialState(event) {
-    return {
+    const state = {
       ...event,
+      selectedOfferIdsByType: { [event.type]: new Set(event.offerIds) },
       isTypeDropdownOpen: false,
     };
+
+    delete state.offerIds;
+
+    return state;
   }
 }
