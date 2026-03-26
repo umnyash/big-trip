@@ -319,6 +319,10 @@ export default class EventFormView extends AbstractStatefulView {
       : value;
 
     this.updateElement({ destinationFieldValue });
+
+    const fieldElement = this.element.querySelector('[name="destination"]');
+    fieldElement.focus();
+    fieldElement.setSelectionRange(fieldElement.value.length, fieldElement.value.length);
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
