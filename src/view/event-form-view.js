@@ -293,6 +293,7 @@ export default class EventFormView extends AbstractStatefulView {
       this.element.querySelector('[name="start-date"]'),
       {
         defaultDate: this._state.startDate,
+        onChange: this.#startDateChangeHandler,
       },
     );
 
@@ -300,6 +301,7 @@ export default class EventFormView extends AbstractStatefulView {
       this.element.querySelector('[name="end-date"]'),
       {
         defaultDate: this._state.endDate,
+        onChange: this.#endDateChangeHandler,
       },
     );
   }
@@ -359,6 +361,14 @@ export default class EventFormView extends AbstractStatefulView {
     const fieldElement = this.element.querySelector('[name="destination"]');
     fieldElement.focus();
     fieldElement.setSelectionRange(fieldElement.value.length, fieldElement.value.length);
+  };
+
+  #startDateChangeHandler = ([date]) => {
+    this._updateState({ startDate: date.toISOString() });
+  };
+
+  #endDateChangeHandler = ([date]) => {
+    this._updateState({ endDate: date.toISOString() });
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
