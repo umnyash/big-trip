@@ -1,6 +1,7 @@
 export { isEscapeEvent, updateArrayItemById } from './common.js';
 
 export {
+  calcDuration,
   formatTime,
   formatDay,
   getFormattedDuration,

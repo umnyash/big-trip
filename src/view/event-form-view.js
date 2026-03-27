@@ -2,6 +2,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { AbstractStatefulView } from '../framework';
 import { eventTypes, eventTypeIds } from '../data';
+import { calcDuration } from '../utils';
 
 const DEFAULT_EVENT_TYPE = 'flight';
 
@@ -365,6 +366,12 @@ export default class EventFormView extends AbstractStatefulView {
   };
 
   #startDateChangeHandler = ([date]) => {
+    if (this._state.startDate && this._state.endDate && date >= new Date(this._state.endDate)) {
+      const eventDuration = calcDuration(this._state.startDate, this._state.endDate);
+      const rescheduledEndDate = new Date(+date + eventDuration);
+      this.#endDatePicker.setDate(rescheduledEndDate, true);
+    }
+
     this._updateState({ startDate: date.toISOString() });
     this.#endDatePicker.set('minDate', this._state.startDate);
   };
