@@ -1,6 +1,7 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 import { AbstractStatefulView } from '../framework';
 import { eventTypes, eventTypeIds } from '../data';
-import { formatFullDate } from '../utils';
 
 const DEFAULT_EVENT_TYPE = 'flight';
 
@@ -138,8 +139,6 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
     id,
     type,
     destinationFieldValue,
-    startDate,
-    endDate,
     basePrice,
     selectedOfferIdsByType,
     isTypeDropdownOpen,
@@ -149,8 +148,6 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
   const typeTitle = eventTypes[type].title;
-  const formattedStartDate = startDate ? formatFullDate(startDate) : '';
-  const formattedEndDate = endDate ? formatFullDate(endDate) : '';
   const selectedOfferIds = selectedOfferIdsByType[type];
 
   return (
@@ -166,12 +163,12 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
           <div class="event-form__field-wrapper event-form__field-wrapper--dates">
             <label class="event-form__field">
               <span class="visually-hidden">From:</span>
-              <input class="event-form__field-control" type="text" name="start-date" value="${formattedStartDate}" required>
+              <input class="event-form__field-control" type="text" name="start-date" value="" required>
             </label>
             &mdash;
             <label class="event-form__field">
               <span class="visually-hidden">To:</span>
-              <input class="event-form__field-control" type="text" name="end-date" value="${formattedEndDate}" required>
+              <input class="event-form__field-control" type="text" name="end-date" value="" required>
             </label>
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--price">
@@ -213,6 +210,8 @@ export default class EventFormView extends AbstractStatefulView {
 
   #destinationNameToIdMap = null;
   #destinationNames = null;
+  #startDatePicker = null;
+  #endDatePicker = null;
 
   constructor({ event = newEvent, destinations, offers, onCloseButtonClick }) {
     super();
@@ -235,6 +234,7 @@ export default class EventFormView extends AbstractStatefulView {
 
   removeElement() {
     super.removeElement();
+    this.#destroyDatePickers();
     document.removeEventListener('click', this.#documentClickHandler);
   }
 
@@ -274,6 +274,42 @@ export default class EventFormView extends AbstractStatefulView {
 
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
+
+    this.#setDatePickers();
+  }
+
+  #createDatePicker(element, options) {
+    return flatpickr(element, {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true,
+      minuteIncrement: 1,
+      ...options,
+    });
+  }
+
+  #setDatePickers() {
+    this.#startDatePicker = this.#createDatePicker(
+      this.element.querySelector('[name="start-date"]'),
+      {
+        defaultDate: this._state.startDate,
+      },
+    );
+
+    this.#endDatePicker = this.#createDatePicker(
+      this.element.querySelector('[name="end-date"]'),
+      {
+        defaultDate: this._state.endDate,
+      },
+    );
+  }
+
+  #destroyDatePickers() {
+    this.#startDatePicker.destroy();
+    this.#startDatePicker = null;
+
+    this.#endDatePicker.destroy();
+    this.#endDatePicker = null;
   }
 
   #getDestinationIdByName(name) {

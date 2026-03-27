@@ -75,6 +75,7 @@ export default class EventPresenter {
     this.#cardComponent = this.#createCardComponent();
     replace(this.#cardComponent, this.#formComponent);
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    this.#formComponent.removeElement();
     this.#formComponent = null;
     this.#onEventExitEditMode();
   }
