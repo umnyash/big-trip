@@ -830,6 +830,15 @@
 
 /* #endregion */
 
+/* #region flatpickr */
+
+.flatpickr-calendar .flatpickr-days .flatpickr-day.selected {
+  background-color: var(--brand-color);
+  border-color: var(--brand-color);
+}
+
+/* #endregion */
+
 /* #region gallery */
 
 .gallery {
