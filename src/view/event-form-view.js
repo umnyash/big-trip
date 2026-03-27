@@ -301,6 +301,7 @@ export default class EventFormView extends AbstractStatefulView {
       this.element.querySelector('[name="end-date"]'),
       {
         defaultDate: this._state.endDate,
+        minDate: this._state.startDate,
         onChange: this.#endDateChangeHandler,
       },
     );
@@ -365,6 +366,7 @@ export default class EventFormView extends AbstractStatefulView {
 
   #startDateChangeHandler = ([date]) => {
     this._updateState({ startDate: date.toISOString() });
+    this.#endDatePicker.set('minDate', this._state.startDate);
   };
 
   #endDateChangeHandler = ([date]) => {
