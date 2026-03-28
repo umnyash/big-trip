@@ -417,16 +417,17 @@
   background: var(--background-secondary-color);
   box-shadow: 0 11px 20px rgba(0, 0, 0, 0.22);
   opacity: 0;
+  transform: translate3d(0, -20px, 0);
   visibility: hidden;
-  transition-property: opacity, visibility;
-  transition-duration: 250ms;
-  transition-timing-function: ease-in;
 }
 
 .dropdown__toggle-button[aria-expanded="true"] + .dropdown__list {
   opacity: 1;
+  transform: translate3d(0, 0, 0);
   visibility: visible;
-  transition-timing-function: ease-out;
+  transition-property: opacity, transform, visibility;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .dropdown__option-label {
