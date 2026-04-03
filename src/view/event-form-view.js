@@ -263,6 +263,7 @@ export default class EventFormView extends AbstractStatefulView {
 
   #typeDropdownChangeHandler = ({ target: { value } }) => {
     this.updateElement({ type: value });
+    this.element.querySelector('[name="type"]:checked').focus();
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
