@@ -59,6 +59,7 @@
   --brand-color-60: rgba(13, 138, 228, 0.6);
   --accent-color: #ffd054;
   --accent-color-60: rgba(255, 208, 84, 0.6);
+  --error-color: #e60a15;
 }
 
 /* #endregion */
@@ -631,6 +632,7 @@
 }
 
 .event-form__field-wrapper {
+  position: relative;
   display: grid;
   padding: 5px 2px;
   border-bottom: 1px solid var(--brand-color);
@@ -675,6 +677,27 @@
 .event-form__field-control::-webkit-outer-spin-button,
 .event-form__field-control::-webkit-inner-spin-button {
   appearance: none;
+}
+
+.event-form__field-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 1px 0 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 17px;
+  color: var(--error-color);
+  background: var(--background-secondary-color);
+  box-shadow: 0 11px 20px rgba(0, 0, 0, 0.043);
+}
+
+.event-form__field-wrapper--price .event-form__field-error {
+  width: max-content;
+  max-width: 280px;
 }
 
 .event-form__actions {

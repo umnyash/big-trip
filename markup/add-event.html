@@ -175,6 +175,12 @@
                   <option value="Vien"></option>
                 </datalist>
               </label>
+              <!--
+                <p class="event-form__field-error">Please select an event type</p>
+                <p class="event-form__field-error">Invalid event type selected</p>
+                <p class="event-form__field-error">Please enter a destination</p>
+                <p class="event-form__field-error">Please select a destination from the list</p>
+              -->
             </div>
             <div class="event-form__field-wrapper event-form__field-wrapper--dates">
               <label class="event-form__field">
@@ -186,12 +192,21 @@
                 <span class="visually-hidden">To:</span>
                 <input class="event-form__field-control" type="text" name="end-date" value="" required>
               </label>
+              <!--
+                <p class="event-form__field-error">Please select a start date</p>
+                <p class="event-form__field-error">Please select an end date</p>
+                <p class="event-form__field-error">End date must be after start date</p>
+              -->
             </div>
             <div class="event-form__field-wrapper event-form__field-wrapper--price">
               <label class="event-form__field">
                 <span class="visually-hidden">Base price:</span>€
                 <input class="event-form__field-control" type="number" name="base-price" value="0" min="1" required>
               </label>
+              <!--
+                <p class="event-form__field-error">Please enter a price</p>
+                <p class="event-form__field-error">Price must be a positive integer</p>
+              -->
             </div>
             <div class="event-form__actions">
               <button class="button button--primary button--size_s" type="submit">
