@@ -283,8 +283,9 @@ export default class EventFormView extends AbstractStatefulView {
     this.element.querySelector('[name="destination"]')
       .addEventListener('input', this.#destinationFieldInputHandler);
 
-    this.element.querySelector('[name="base-price"]')
-      .addEventListener('input', this.#basePriceFieldInputHandler);
+    const basePriceFieldElement = this.element.querySelector('[name="base-price"]');
+    basePriceFieldElement.addEventListener('input', this.#basePriceFieldInputHandler);
+    basePriceFieldElement.addEventListener('keydown', this.#basePriceFieldKeydownHandler);
 
     this.element.querySelector('.event-form__offers')
       ?.addEventListener('change', this.#offersChangeHandler);
@@ -467,6 +468,12 @@ export default class EventFormView extends AbstractStatefulView {
     }
 
     this._updateState({ endDate: dateString });
+  };
+
+  #basePriceFieldKeydownHandler = (evt) => {
+    if (['e', ',', '.'].includes(evt.key)) {
+      evt.preventDefault();
+    }
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
