@@ -2,9 +2,18 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { AbstractStatefulView } from '../framework';
 import { eventTypes, eventTypeIds } from '../data';
-import { calcDuration } from '../utils';
+import { calcDuration, focusFieldAtEnd } from '../utils';
 
 const DEFAULT_EVENT_TYPE = 'flight';
+
+const ValidationErrorText = {
+  DESTINATION_REQUIRED: 'Please enter a destination',
+  DESTINATION_INVALID: 'Please select a destination from the list',
+  START_DATE_REQUIRED: 'Please select a start date',
+  END_DATE_REQUIRED: 'Please select an end date',
+  BASE_PRICE_REQUIRED: 'Please enter a price',
+  BASE_PRICE_INVALID: 'Price must be a positive integer',
+};
 
 const newEvent = {
   type: DEFAULT_EVENT_TYPE,
@@ -64,7 +73,6 @@ function createEventFormDestinationFieldTemplate(destinationNames, value = '', e
         name="destination"
         value="${value}"
         list="${dataListId}"
-        required
       >
       <datalist id="${dataListId}">
         ${destinationNames.map((name) => `
@@ -143,6 +151,10 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
     basePrice,
     selectedOfferIdsByType,
     isTypeDropdownOpen,
+    destinationError,
+    startDateError,
+    endDateError,
+    basePriceError,
   } = state;
 
   const isNew = !id;
@@ -150,33 +162,37 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
   const typeTitle = eventTypes[type].title;
   const selectedOfferIds = selectedOfferIdsByType[type];
+  const datesError = startDateError || endDateError;
 
   return (
     `<li class="event-list__item">
-      <form class="event-list__form event-form" action="https://echo.htmlacademy.ru" method="post">
+      <form class="event-list__form event-form" action="https://echo.htmlacademy.ru" method="post" novalidate>
         <div class="event-form__header">
           <h3 class="visually-hidden">${formTitle}</h3>
           ${createEventFormTypeDropdownTemplate(type, isTypeDropdownOpen)}
           <div class="event-form__field-wrapper event-form__field-wrapper--title">
             <span id="event-form-type">${typeTitle}</span>
             ${createEventFormDestinationFieldTemplate(destinationNames, destinationFieldValue, id)}
+            ${destinationError ? `<p class="event-form__field-error">${destinationError}</p>` : ''}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--dates">
             <label class="event-form__field">
               <span class="visually-hidden">From:</span>
-              <input class="event-form__field-control" type="text" name="start-date" value="" required>
+              <input class="event-form__field-control" type="text" name="start-date" value="">
             </label>
             &mdash;
             <label class="event-form__field">
               <span class="visually-hidden">To:</span>
-              <input class="event-form__field-control" type="text" name="end-date" value="" required>
+              <input class="event-form__field-control" type="text" name="end-date" value="">
             </label>
+            ${datesError ? `<p class="event-form__field-error">${datesError}</p>` : ''}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--price">
             <label class="event-form__field">
               <span class="visually-hidden">Base price:</span>€
-              <input class="event-form__field-control" type="number" name="base-price" value="${basePrice}" min="1" required>
+              <input class="event-form__field-control" type="number" name="base-price" value="${basePrice}" min="1">
             </label>
+            ${basePriceError ? `<p class="event-form__field-error">${basePriceError}</p>` : ''}
           </div>
           <div class="event-form__actions">
             <button class="button button--primary button--size_s" type="submit">
@@ -273,6 +289,9 @@ export default class EventFormView extends AbstractStatefulView {
     this.element.querySelector('.event-form__offers')
       ?.addEventListener('change', this.#offersChangeHandler);
 
+    this.element.querySelector('.event-form')
+      .addEventListener('submit', this.#formSubmitHandler);
+
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
 
@@ -320,6 +339,52 @@ export default class EventFormView extends AbstractStatefulView {
     return this.#destinationNameToIdMap[name.trim().toLowerCase()] ?? null;
   }
 
+  #restoreDestinationFieldFocus() {
+    focusFieldAtEnd(this.element.querySelector('[name="destination"]'));
+  }
+
+  #restoreBasePriceFieldFocus() {
+    focusFieldAtEnd(this.element.querySelector('[name="base-price"]'));
+  }
+
+  #validateDestination(value) {
+    if (value.trim() === '') {
+      return ValidationErrorText.DESTINATION_REQUIRED;
+    }
+
+    const destinationId = this.#getDestinationIdByName(value);
+    return destinationId ? null : ValidationErrorText.DESTINATION_INVALID;
+  }
+
+  #validateStartDate(value) {
+    return value ? null : ValidationErrorText.START_DATE_REQUIRED;
+  }
+
+  #validateEndDate(value) {
+    return value ? null : ValidationErrorText.END_DATE_REQUIRED;
+  }
+
+  #validateBasePrice(value) {
+    if (value === '') {
+      return ValidationErrorText.BASE_PRICE_REQUIRED;
+    }
+
+    const numericValue = +value;
+
+    return (numericValue > 0 && Number.isInteger(numericValue))
+      ? null
+      : ValidationErrorText.BASE_PRICE_INVALID;
+  }
+
+  #validate() {
+    return {
+      destinationError: this.#validateDestination(this._state.destinationFieldValue),
+      startDateError: this.#validateStartDate(this._state.startDate),
+      endDateError: this.#validateEndDate(this._state.endDate),
+      basePriceError: this.#validateBasePrice(this._state.basePrice),
+    };
+  }
+
   #openTypeDropdown(buttonElement) {
     this._updateState({ isTypeDropdownOpen: true });
     buttonElement.ariaExpanded = this._state.isTypeDropdownOpen;
@@ -349,20 +414,23 @@ export default class EventFormView extends AbstractStatefulView {
     const currentDestinationId = this.#getDestinationIdByName(this._state.destinationFieldValue);
     const newDestinationId = this.#getDestinationIdByName(value);
 
-    if (newDestinationId === currentDestinationId) {
+    const currentValidationError = this._state.destinationError;
+
+    const newValidationError = this._state.shouldValidateOnInput
+      ? this.#validateDestination(value)
+      : null;
+
+    if (newDestinationId === currentDestinationId && currentValidationError === newValidationError) {
       this._updateState({ destinationFieldValue: value });
       return;
     }
 
-    const destinationFieldValue = newDestinationId
-      ? this.#destinations[newDestinationId].name
-      : value;
+    this.updateElement({
+      destinationFieldValue: newDestinationId ? this.#destinations[newDestinationId].name : value,
+      ...(this._state.shouldValidateOnInput && { destinationError: newValidationError }),
+    });
 
-    this.updateElement({ destinationFieldValue });
-
-    const fieldElement = this.element.querySelector('[name="destination"]');
-    fieldElement.focus();
-    fieldElement.setSelectionRange(fieldElement.value.length, fieldElement.value.length);
+    this.#restoreDestinationFieldFocus();
   };
 
   #startDateChangeHandler = ([date]) => {
@@ -372,16 +440,53 @@ export default class EventFormView extends AbstractStatefulView {
       this.#endDatePicker.setDate(rescheduledEndDate, true);
     }
 
-    this._updateState({ startDate: date.toISOString() });
+    const dateString = date.toISOString();
+
+    if (this._state.shouldValidateOnInput && this._state.startDateError) {
+      this.updateElement({
+        startDate: dateString,
+        startDateError: this.#validateStartDate(dateString),
+      });
+    } else {
+      this._updateState({ startDate: dateString });
+    }
+
     this.#endDatePicker.set('minDate', this._state.startDate);
   };
 
   #endDateChangeHandler = ([date]) => {
-    this._updateState({ endDate: date.toISOString() });
+    const dateString = date.toISOString();
+
+    if (this._state.shouldValidateOnInput && this._state.endDateError) {
+      this.updateElement({
+        endDate: dateString,
+        endDateError: this.#validateEndDate(dateString),
+      });
+
+      return;
+    }
+
+    this._updateState({ endDate: dateString });
   };
 
   #basePriceFieldInputHandler = ({ target: { value } }) => {
-    this._updateState({ basePrice: value });
+    const currentValidationError = this._state.basePriceError;
+
+    const newValidationError = this._state.shouldValidateOnInput
+      ? this.#validateBasePrice(value)
+      : null;
+
+    if (currentValidationError === newValidationError) {
+      this._updateState({ basePrice: value });
+      return;
+    }
+
+    this.updateElement({
+      basePrice: value,
+      basePriceError: newValidationError,
+    });
+
+    this.#restoreBasePriceFieldFocus();
   };
 
   #offersChangeHandler = ({ target: { value, checked } }) => {
@@ -399,6 +504,20 @@ export default class EventFormView extends AbstractStatefulView {
         [this._state.type]: selectedOfferIds,
       },
     });
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+
+    const validationErrors = this.#validate();
+    const hasErrors = Object.values(validationErrors).some(Boolean);
+
+    if (hasErrors) {
+      this.updateElement({
+        ...validationErrors,
+        shouldValidateOnInput: true,
+      });
+    }
   };
 
   #closeButtonClickHandler = () => {
@@ -430,9 +549,15 @@ export default class EventFormView extends AbstractStatefulView {
   static #createInitialState(event, destinations) {
     const state = {
       ...event,
+      basePrice: String(event.basePrice),
       destinationFieldValue: destinations[event.destinationId]?.name ?? '',
       selectedOfferIdsByType: { [event.type]: new Set(event.offerIds) },
       isTypeDropdownOpen: false,
+      destinationError: null,
+      startDateError: null,
+      endDateError: null,
+      basePriceError: null,
+      shouldValidateOnInput: false,
     };
 
     delete state.offerIds;
