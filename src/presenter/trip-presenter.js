@@ -110,7 +110,10 @@ export default class TripPresenter {
 
   #eventUpdateHandler = (eventData) => {
     updateArrayItemById(this.#events, eventData);
-    this.#eventPresenters.get(eventData.id).init(eventData);
+
+    this.#sortEvents();
+    this.#clearEvents();
+    this.#renderEvents();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {

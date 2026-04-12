@@ -223,6 +223,7 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
 export default class EventFormView extends AbstractStatefulView {
   #destinations = null;
   #offers = null;
+  #onFormSubmit = null;
   #onCloseButtonClick = null;
 
   #destinationNameToIdMap = null;
@@ -230,11 +231,12 @@ export default class EventFormView extends AbstractStatefulView {
   #startDatePicker = null;
   #endDatePicker = null;
 
-  constructor({ event = newEvent, destinations, offers, onCloseButtonClick }) {
+  constructor({ event = newEvent, destinations, offers, onFormSubmit, onCloseButtonClick }) {
     super();
 
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#onFormSubmit = onFormSubmit;
     this.#onCloseButtonClick = onCloseButtonClick;
 
     const {
@@ -386,6 +388,26 @@ export default class EventFormView extends AbstractStatefulView {
     };
   }
 
+  #extractEventFromState(state) {
+    const { id, type, destinationFieldValue, basePrice, startDate, endDate, isFavorite } = state;
+    const destinationId = this.#getDestinationIdByName(destinationFieldValue);
+
+    const offerIds = state.selectedOfferIdsByType[type]
+      ? Array.from(state.selectedOfferIdsByType[type])
+      : [];
+
+    return {
+      type,
+      basePrice: Number(basePrice),
+      destinationId,
+      startDate,
+      endDate,
+      isFavorite,
+      offerIds,
+      ...(id && { id }),
+    };
+  }
+
   #openTypeDropdown(buttonElement) {
     this._updateState({ isTypeDropdownOpen: true });
     buttonElement.ariaExpanded = this._state.isTypeDropdownOpen;
@@ -524,7 +546,11 @@ export default class EventFormView extends AbstractStatefulView {
         ...validationErrors,
         shouldValidateOnInput: true,
       });
+
+      return;
     }
+
+    this.#onFormSubmit(this.#extractEventFromState(this._state));
   };
 
   #closeButtonClickHandler = () => {

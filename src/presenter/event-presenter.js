@@ -33,6 +33,12 @@ export default class EventPresenter {
 
   init(event) {
     this.#event = event;
+
+    if (this.#formComponent) {
+      this.exitEditMode();
+      return;
+    }
+
     const newCardComponent = this.#createCardComponent();
 
     if (this.#cardComponent) {
@@ -59,6 +65,7 @@ export default class EventPresenter {
       event: this.#event,
       destinations: this.#destinations,
       offers: this.#offers,
+      onFormSubmit: this.#formSubmitHandler,
       onCloseButtonClick: this.#formCloseButtonClickHandler,
     });
   }
@@ -88,6 +95,10 @@ export default class EventPresenter {
 
   #cardEditButtonClickHandler = () => {
     this.#enterEditMode();
+  };
+
+  #formSubmitHandler = (eventData) => {
+    this.#onEventUpdate(eventData);
   };
 
   #formCloseButtonClickHandler = () => {
