@@ -1,4 +1,4 @@
-import { SortType } from '../constants.js';
+import { SortType, TimeStatus } from '../constants.js';
 import { calcDuration } from './date.js';
 
 const eventComparators = {
@@ -20,4 +20,25 @@ function sortEventsBy(events, sortType) {
   return events.toSorted(comparator);
 }
 
-export { sortEventsBy };
+const eventTimeStatusCheckers = {
+  [TimeStatus.PAST]: (event, currentDate) => new Date(event.endDate) < currentDate,
+  [TimeStatus.UPCOMING]: (event, currentDate) => new Date(event.startDate) > currentDate,
+  [TimeStatus.ONGOING]: (event, currentDate) => new Date(event.startDate) <= currentDate && new Date(event.endDate) >= currentDate,
+};
+
+function checkEventTimeStatus(event, timeStatus, currentDate) {
+  const checker = eventTimeStatusCheckers[timeStatus];
+
+  if (!checker) {
+    throw new Error(`Unsupported time status: ${timeStatus}`);
+  }
+
+  return checker(event, currentDate);
+}
+
+function filterEvents(events, timeStatus) {
+  const currentDate = Date.now();
+  return events.filter((event) => checkEventTimeStatus(event, timeStatus, currentDate));
+}
+
+export { filterEvents, sortEventsBy };

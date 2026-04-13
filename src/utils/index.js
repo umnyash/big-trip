@@ -7,4 +7,4 @@ export {
   getFormattedDuration,
 } from './date.js';
 
-export { sortEventsBy } from './events.js';
+export { filterEvents, sortEventsBy } from './events.js';
