@@ -19,10 +19,12 @@ export default class TripPresenter {
   #events = [];
   #offers = null;
 
+  #filterComponent = null;
   #sortComponent = null;
   #eventListComponent = new EventListView();
 
   #sortType = SortType.DATE_ASC;
+  #filter = null;
   #eventPresenters = new Map();
   #editingEventPresenter = null;
 
@@ -38,6 +40,15 @@ export default class TripPresenter {
 
     this.#sortEvents();
     this.#render();
+  }
+
+  #renderFilter() {
+    this.#filterComponent = new TripFilterView({
+      filter: this.#filter,
+      onFilterChange: this.#filterChangeHandler,
+    });
+
+    render(this.#filterComponent, this.#headerElement);
   }
 
   #renderSort() {
@@ -69,7 +80,7 @@ export default class TripPresenter {
 
   #render() {
     if (!this.#events.length) {
-      render(new TripFilterView(), this.#headerElement);
+      this.#renderFilter();
       render(new AddEventButtonView(), this.#headerElement);
 
       render(
@@ -84,7 +95,7 @@ export default class TripPresenter {
     render(new TripTitleView(), this.#headerElement);
     render(new TripDatesView(), this.#headerElement);
     render(new TripPriceView(), this.#headerElement);
-    render(new TripFilterView(), this.#headerElement);
+    this.#renderFilter();
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
     this.#renderSort();
@@ -100,6 +111,10 @@ export default class TripPresenter {
   #sortEvents() {
     this.#events = sortEventsBy(this.#events, this.#sortType);
   }
+
+  #filterChangeHandler = (filter) => {
+    this.#filter = filter;
+  };
 
   #sortChangeHandler = (value) => {
     this.#sortType = value;

@@ -35,8 +35,21 @@ function createTripFilterTemplate(filter) {
 
 export default class TripFilterView extends AbstractView {
   #filter = null;
+  #onFilterChange = null;
+
+  constructor({ filter, onFilterChange }) {
+    super();
+
+    this.#filter = filter;
+    this.#onFilterChange = onFilterChange;
+    this.element.addEventListener('change', this.#formChangeHandler);
+  }
 
   _getTemplate() {
     return createTripFilterTemplate(this.#filter);
   }
+
+  #formChangeHandler = (evt) => {
+    this.#onFilterChange(evt.target.value || null);
+  };
 }
