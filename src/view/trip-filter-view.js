@@ -1,31 +1,42 @@
 import { AbstractView } from '../framework';
 import { TimeStatus } from '../constants.js';
 
-function createTripFilterTemplate() {
+const items = [
+  { label: 'Everything', value: '' },
+  { label: 'Future', value: TimeStatus.UPCOMING },
+  { label: 'Present', value: TimeStatus.ONGOING },
+  { label: 'Past', value: TimeStatus.PAST },
+];
+
+function createTripFilterItemTemplate({ label, value }, currentTimeStatus) {
+  const isChecked = value ? value === currentTimeStatus : !currentTimeStatus;
+
+  return (
+    `<label class="checker checker--soft">
+      <input
+        class="checker__control visually-hidden"
+        type="radio"
+        name="time-status"
+        value="${value}"
+        ${isChecked ? 'checked' : ''}
+      >
+      <span class="checker__label">${label}</span>
+    </label>`
+  );
+}
+
+function createTripFilterTemplate(filter) {
   return (
     `<form class="trip-header__filter trip-filter" action="https://echo.htmlacademy.ru/courses" method="get">
-      <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="everything" checked>
-        <span class="checker__label">Everything</span>
-      </label>
-      <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.UPCOMING}">
-        <span class="checker__label">Future</span>
-      </label>
-      <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.ONGOING}">
-        <span class="checker__label">Present</span>
-      </label>
-      <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.PAST}">
-        <span class="checker__label">Past</span>
-      </label>
+      ${items.map((item) => createTripFilterItemTemplate(item, filter)).join('')}
     </form>`
   );
 }
 
 export default class TripFilterView extends AbstractView {
+  #filter = null;
+
   _getTemplate() {
-    return createTripFilterTemplate();
+    return createTripFilterTemplate(this.#filter);
   }
 }
