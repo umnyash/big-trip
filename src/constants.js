@@ -4,4 +4,10 @@ const SortType = {
   PRICE_DESC: 'price-desc',
 };
 
-export { SortType };
+const TimeStatus = {
+  UPCOMING: 'upcoming',
+  ONGOING: 'ongoing',
+  PAST: 'past',
+};
+
+export { SortType, TimeStatus };

@@ -1,4 +1,5 @@
 import { AbstractView } from '../framework';
+import { TimeStatus } from '../constants.js';
 
 function createTripFilterTemplate() {
   return (
@@ -8,15 +9,15 @@ function createTripFilterTemplate() {
         <span class="checker__label">Everything</span>
       </label>
       <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="future">
+        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.UPCOMING}">
         <span class="checker__label">Future</span>
       </label>
       <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="present">
+        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.ONGOING}">
         <span class="checker__label">Present</span>
       </label>
       <label class="checker checker--soft">
-        <input class="checker__control visually-hidden" type="radio" name="time-status" value="past">
+        <input class="checker__control visually-hidden" type="radio" name="time-status" value="${TimeStatus.PAST}">
         <span class="checker__label">Past</span>
       </label>
     </form>`
