@@ -17,9 +17,12 @@ export default class TripPresenter {
   #events = [];
   #offers = null;
 
+  #summaryComponent = null;
   #filterComponent = null;
+  #addEventButtonComponent = null;
+  #messageComponent = null;
   #sortComponent = null;
-  #eventListComponent = new EventListView();
+  #eventListComponent = null;
 
   #sortType = SortType.DATE_ASC;
   #filter = null;
@@ -40,6 +43,11 @@ export default class TripPresenter {
     this.#render();
   }
 
+  #renderSummary() {
+    this.#summaryComponent = new TripSummary();
+    render(this.#summaryComponent, this.#headerElement);
+  }
+
   #renderFilter() {
     this.#filterComponent = new TripFilterView({
       filter: this.#filter,
@@ -47,6 +55,16 @@ export default class TripPresenter {
     });
 
     render(this.#filterComponent, this.#headerElement);
+  }
+
+  #renderAddEventButtonComponent() {
+    this.#addEventButtonComponent = new AddEventButtonView();
+    render(this.#addEventButtonComponent, this.#headerElement);
+  }
+
+  #renderMessage() {
+    this.#messageComponent = new TripMessage({ variant: MessageVariant.NoEvents });
+    render(this.#messageComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 
   #renderSort() {
@@ -76,26 +94,29 @@ export default class TripPresenter {
     this.#events.forEach((event) => this.#renderEventCard(event));
   }
 
+  #renderEventList() {
+    this.#eventListComponent = new EventListView();
+    render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
+  }
+
+  #renderEvents() {
+    if (this.#events.length) {
+      this.#renderEventList();
+      this.#renderSort();
+      this.#renderEventCards();
+    } else if (!this.#filter) {
+      this.#renderMessage();
+    }
+  }
+
   #render() {
-    if (!this.#events.length) {
-      this.#renderFilter();
-      render(new AddEventButtonView(), this.#headerElement);
-
-      render(
-        new TripMessage({ variant: MessageVariant.NoEvents }),
-        this.#headerElement,
-        RenderPosition.AFTEREND
-      );
-
-      return;
+    if (this.#events.length) {
+      this.#renderSummary();
     }
 
-    render(new TripSummary(), this.#headerElement);
     this.#renderFilter();
-    render(new AddEventButtonView(), this.#headerElement);
-    render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
-    this.#renderSort();
-    this.#renderEventCards();
+    this.#renderAddEventButtonComponent();
+    this.#renderEvents();
   }
 
   #clearEventList() {
