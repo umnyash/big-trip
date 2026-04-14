@@ -58,7 +58,7 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 
-  #renderEvent(event) {
+  #renderEventCard(event) {
     const eventPresenter = new EventPresenter({
       containerElement: this.#eventListComponent.element,
       destinations: this.#destinations,
@@ -72,8 +72,8 @@ export default class TripPresenter {
     eventPresenter.init(event);
   }
 
-  #renderEvents() {
-    this.#events.forEach((event) => this.#renderEvent(event));
+  #renderEventCards() {
+    this.#events.forEach((event) => this.#renderEventCard(event));
   }
 
   #render() {
@@ -95,10 +95,10 @@ export default class TripPresenter {
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
     this.#renderSort();
-    this.#renderEvents();
+    this.#renderEventCards();
   }
 
-  #clearEvents() {
+  #clearEventList() {
     this.#eventPresenters.forEach((presenter) => presenter.destroy());
     this.#eventPresenters.clear();
     this.#editingEventPresenter = null;
@@ -115,16 +115,16 @@ export default class TripPresenter {
   #sortChangeHandler = (value) => {
     this.#sortType = value;
     this.#sortEvents();
-    this.#clearEvents();
-    this.#renderEvents();
+    this.#clearEventList();
+    this.#renderEventCards();
   };
 
   #eventUpdateHandler = (eventData) => {
     updateArrayItemById(this.#events, eventData);
 
     this.#sortEvents();
-    this.#clearEvents();
-    this.#renderEvents();
+    this.#clearEventList();
+    this.#renderEventCards();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
