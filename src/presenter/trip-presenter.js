@@ -1,6 +1,6 @@
-import { RenderPosition, render } from '../framework';
+import { RenderPosition, render, remove } from '../framework';
 import { SortType } from '../constants.js';
-import { sortEventsBy, updateArrayItemById } from '../utils';
+import { filterEvents, sortEventsBy, updateArrayItemById } from '../utils';
 
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
@@ -14,7 +14,8 @@ export default class TripPresenter {
   #headerElement = null;
   #model = null;
   #destinations = null;
-  #events = [];
+  #allEvents = [];
+  #displayedEvents = [];
   #offers = null;
 
   #summaryComponent = null;
@@ -24,7 +25,8 @@ export default class TripPresenter {
   #sortComponent = null;
   #eventListComponent = null;
 
-  #sortType = SortType.DATE_ASC;
+  #defaultSortType = SortType.DATE_ASC;
+  #sortType = this.#defaultSortType;
   #filter = null;
   #eventPresenters = new Map();
   #editingEventPresenter = null;
@@ -36,7 +38,8 @@ export default class TripPresenter {
 
   init() {
     this.#destinations = this.#model.destinations;
-    this.#events = this.#model.events;
+    this.#allEvents = [...this.#model.events];
+    this.#displayedEvents = this.#model.events;
     this.#offers = this.#model.offers;
 
     this.#sortEvents();
@@ -91,7 +94,7 @@ export default class TripPresenter {
   }
 
   #renderEventCards() {
-    this.#events.forEach((event) => this.#renderEventCard(event));
+    this.#displayedEvents.forEach((event) => this.#renderEventCard(event));
   }
 
   #renderEventList() {
@@ -100,7 +103,7 @@ export default class TripPresenter {
   }
 
   #renderEvents() {
-    if (this.#events.length) {
+    if (this.#displayedEvents.length) {
       this.#renderEventList();
       this.#renderSort();
       this.#renderEventCards();
@@ -110,7 +113,7 @@ export default class TripPresenter {
   }
 
   #render() {
-    if (this.#events.length) {
+    if (this.#allEvents.length) {
       this.#renderSummary();
     }
 
@@ -125,12 +128,33 @@ export default class TripPresenter {
     this.#editingEventPresenter = null;
   }
 
+  #clearEvents() {
+    this.#clearEventList();
+    remove(this.#sortComponent);
+    remove(this.#messageComponent);
+    remove(this.#eventListComponent);
+    this.#sortComponent = null;
+    this.#eventListComponent = null;
+    this.#messageComponent = null;
+  }
+
   #sortEvents() {
-    this.#events = sortEventsBy(this.#events, this.#sortType);
+    this.#displayedEvents = sortEventsBy(this.#displayedEvents, this.#sortType);
+  }
+
+  #filterEvents() {
+    this.#displayedEvents = this.#filter
+      ? filterEvents(this.#allEvents, this.#filter)
+      : this.#allEvents;
   }
 
   #filterChangeHandler = (filter) => {
     this.#filter = filter;
+    this.#sortType = this.#defaultSortType;
+    this.#clearEvents();
+    this.#filterEvents();
+    this.#sortEvents();
+    this.#renderEvents();
   };
 
   #sortChangeHandler = (value) => {
@@ -141,7 +165,8 @@ export default class TripPresenter {
   };
 
   #eventUpdateHandler = (eventData) => {
-    updateArrayItemById(this.#events, eventData);
+    updateArrayItemById(this.#displayedEvents, eventData);
+    updateArrayItemById(this.#allEvents, eventData);
 
     this.#sortEvents();
     this.#clearEventList();
