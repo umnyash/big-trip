@@ -1,5 +1,5 @@
 import { RenderPosition, render, remove } from '../framework';
-import { SortType } from '../constants.js';
+import { TimeStatus, SortType } from '../constants.js';
 import { filterEvents, sortEventsBy, updateArrayItemById } from '../utils';
 
 import EventPresenter from './event-presenter.js';
@@ -66,7 +66,23 @@ export default class TripPresenter {
   }
 
   #renderMessage() {
-    this.#messageComponent = new TripMessage({ variant: MessageVariant.NoEvents });
+    let messageVariant;
+
+    switch (this.#filter) {
+      case TimeStatus.PAST:
+        messageVariant = MessageVariant.NoPastEvents;
+        break;
+      case TimeStatus.ONGOING:
+        messageVariant = MessageVariant.NoOngoingEvents;
+        break;
+      case TimeStatus.UPCOMING:
+        messageVariant = MessageVariant.NoUpcomingEvents;
+        break;
+      default:
+        messageVariant = MessageVariant.NoEvents;
+    }
+
+    this.#messageComponent = new TripMessage({ variant: messageVariant });
     render(this.#messageComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 
@@ -107,7 +123,7 @@ export default class TripPresenter {
       this.#renderEventList();
       this.#renderSort();
       this.#renderEventCards();
-    } else if (!this.#filter) {
+    } else {
       this.#renderMessage();
     }
   }
