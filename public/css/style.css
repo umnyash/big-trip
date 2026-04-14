@@ -988,6 +988,10 @@
   height: auto;
 }
 
+.trip-header__summary {
+  display: contents;
+}
+
 .trip-header__title {
   grid-area: title;
   margin: 0;
@@ -1028,7 +1032,7 @@
   margin: 0 0 2px;
 }
 
-.trip-header__title ~ .trip-header__add-button {
+.trip-header__summary ~ .trip-header__add-button {
   margin-top: 35px;
 }
 

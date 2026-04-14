@@ -5,11 +5,9 @@ import { sortEventsBy, updateArrayItemById } from '../utils';
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
 import EventListView from '../view/event-list-view.js';
-import TripDatesView from '../view/trip-dates-view.js';
 import TripFilterView from '../view/trip-filter-view.js';
-import TripPriceView from '../view/trip-price-view.js';
 import TripSortView from '../view/trip-sort-view.js';
-import TripTitleView from '../view/trip-title-view.js';
+import TripSummary from '../view/trip-summary-view.js';
 import TripMessage, { MessageVariant } from '../view/trip-message-view.js';
 
 export default class TripPresenter {
@@ -92,9 +90,7 @@ export default class TripPresenter {
       return;
     }
 
-    render(new TripTitleView(), this.#headerElement);
-    render(new TripDatesView(), this.#headerElement);
-    render(new TripPriceView(), this.#headerElement);
+    render(new TripSummary(), this.#headerElement);
     this.#renderFilter();
     render(new AddEventButtonView(), this.#headerElement);
     render(this.#eventListComponent, this.#headerElement, RenderPosition.AFTEREND);
