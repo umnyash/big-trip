@@ -904,9 +904,15 @@
   --trip-list-margin-top: 8px;
   --trip-line-width: 2px;
 
+  --scrollbar-width: calc(100vw - 100%);
+  --content-width: 1180px;
+  --half-remaining-space: calc((100vw - var(--content-width) - var(--trip-grid-column-gap) * 2) / 2);
+  --first-column-width: var(--half-remaining-space);
+  --last-column-width: calc(var(--half-remaining-space) - var(--scrollbar-width));
+
   display: grid;
   min-height: 100dvh;
-  grid-template-columns: 1fr 82px 42px 295px 225px 37px 32px 38px 181px 28px 58px 1fr;
+  grid-template-columns: var(--first-column-width) 82px 42px 1fr 225px 37px 32px 38px 181px 28px 58px var(--last-column-width);
   column-gap: var(--trip-grid-column-gap);
   align-content: start;
 }
@@ -969,6 +975,7 @@
 /* #region trip-header */
 
 .trip-header {
+  position: relative;
   display: grid;
   padding: 23px 0 10px;
   grid-template-columns: subgrid;
@@ -978,11 +985,21 @@
     ". . logo filter filter filter filter filter add-button add-button add-button .";
   align-items: start;
   color: var(--text-additional-color);
+  overflow-x: hidden;
+}
+
+.trip-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100vw;
   background: var(--brand-color) url("../img/header-background.png") 0 0 / cover;
 }
 
 .trip-header__logo {
-  z-index: 1;
   grid-area: logo;
   width: 100%;
   height: auto;
