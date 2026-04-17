@@ -1,6 +1,12 @@
 import { RenderPosition, render, remove } from '../framework';
 import { TimeStatus, SortType } from '../constants.js';
-import { filterEvents, sortEventsBy, updateArrayItemById } from '../utils';
+
+import {
+  extractTripRoute,
+  filterEvents,
+  sortEventsBy,
+  updateArrayItemById,
+} from '../utils';
 
 import EventPresenter from './event-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
@@ -47,7 +53,10 @@ export default class TripPresenter {
   }
 
   #renderSummary() {
-    this.#summaryComponent = new TripSummary();
+    this.#summaryComponent = new TripSummary({
+      route: extractTripRoute(this.#allEvents, this.#destinations),
+    });
+
     render(this.#summaryComponent, this.#headerElement);
   }
 

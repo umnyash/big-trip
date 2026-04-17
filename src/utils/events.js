@@ -41,4 +41,18 @@ function filterEvents(events, timeStatus) {
   return events.filter((event) => checkEventTimeStatus(event, timeStatus, currentDate));
 }
 
-export { filterEvents, sortEventsBy };
+function extractTripRoute(events, destinations) {
+  const sortedEvents = sortEventsBy(events, SortType.DATE_ASC);
+
+  return sortedEvents.reduce((route, event) => {
+    const destinationName = destinations[event.destinationId].name;
+
+    if (route.at(-1) !== destinationName) {
+      route.push(destinationName);
+    }
+
+    return route;
+  }, []);
+}
+
+export { extractTripRoute, filterEvents, sortEventsBy };
