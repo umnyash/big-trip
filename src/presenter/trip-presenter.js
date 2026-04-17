@@ -167,6 +167,16 @@ export default class TripPresenter {
     this.#messageComponent = null;
   }
 
+  #clear() {
+    remove(this.#summaryComponent);
+    remove(this.#filterComponent);
+    remove(this.#addEventButtonComponent);
+    this.#clearEvents();
+    this.#summaryComponent = null;
+    this.#filterComponent = null;
+    this.#addEventButtonComponent = null;
+  }
+
   #sortEvents() {
     this.#displayedEvents = sortEventsBy(this.#displayedEvents, this.#sortType);
   }
@@ -197,10 +207,10 @@ export default class TripPresenter {
     updateArrayItemById(this.#displayedEvents, eventData);
     updateArrayItemById(this.#allEvents, eventData);
 
-    this.#clearEvents();
+    this.#clear();
     this.#filterEvents();
     this.#sortEvents();
-    this.#renderEvents();
+    this.#render();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
