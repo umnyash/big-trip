@@ -8,8 +8,12 @@ const items = [
   { label: 'Past', value: TimeStatus.PAST },
 ];
 
-function createTripFilterItemTemplate({ label, value }, currentTimeStatus) {
+function createTripFilterItemTemplate({ label, value }, currentTimeStatus, availableTimeStatuses) {
   const isChecked = value ? value === currentTimeStatus : !currentTimeStatus;
+
+  const isEnabled = value
+    ? availableTimeStatuses.includes(value)
+    : Boolean(availableTimeStatuses.length);
 
   return (
     `<label class="checker checker--soft">
@@ -19,34 +23,37 @@ function createTripFilterItemTemplate({ label, value }, currentTimeStatus) {
         name="time-status"
         value="${value}"
         ${isChecked ? 'checked' : ''}
+        ${isEnabled ? '' : 'disabled'}
       >
       <span class="checker__label">${label}</span>
     </label>`
   );
 }
 
-function createTripFilterTemplate(filter) {
+function createTripFilterTemplate(filter, availableTimeStatuses) {
   return (
     `<form class="trip-header__filter trip-filter" action="https://echo.htmlacademy.ru/courses" method="get">
-      ${items.map((item) => createTripFilterItemTemplate(item, filter)).join('')}
+      ${items.map((item) => createTripFilterItemTemplate(item, filter, availableTimeStatuses)).join('')}
     </form>`
   );
 }
 
 export default class TripFilterView extends AbstractView {
   #filter = null;
+  #availableTimeStatuses = [];
   #onFilterChange = null;
 
-  constructor({ filter, onFilterChange }) {
+  constructor({ filter, availableTimeStatuses, onFilterChange }) {
     super();
 
     this.#filter = filter;
+    this.#availableTimeStatuses = availableTimeStatuses;
     this.#onFilterChange = onFilterChange;
     this.element.addEventListener('change', this.#formChangeHandler);
   }
 
   _getTemplate() {
-    return createTripFilterTemplate(this.#filter);
+    return createTripFilterTemplate(this.#filter, this.#availableTimeStatuses);
   }
 
   #formChangeHandler = (evt) => {

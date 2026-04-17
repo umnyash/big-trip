@@ -55,6 +55,14 @@ function extractTripRoute(events, destinations) {
   }, []);
 }
 
+function extractEventTimeStatuses(events) {
+  const currentDate = Date.now();
+
+  return Object.values(TimeStatus).filter(
+    (timeStatus) => events.some((event) => checkEventTimeStatus(event, timeStatus, currentDate))
+  );
+}
+
 function getTripDates(events) {
   let startDate = new Date(events[0].startDate);
   let endDate = new Date(events[0].endDate);
@@ -95,5 +103,6 @@ export {
   getTripDates,
   calcTripPrice,
   filterEvents,
+  extractEventTimeStatuses,
   sortEventsBy,
 };

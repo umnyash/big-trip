@@ -6,6 +6,7 @@ import {
   getTripDates,
   calcTripPrice,
   filterEvents,
+  extractEventTimeStatuses,
   sortEventsBy,
   updateArrayItemById,
 } from '../utils';
@@ -67,6 +68,7 @@ export default class TripPresenter {
   #renderFilter() {
     this.#filterComponent = new TripFilterView({
       filter: this.#filter,
+      availableTimeStatuses: extractEventTimeStatuses(this.#allEvents),
       onFilterChange: this.#filterChangeHandler,
     });
 

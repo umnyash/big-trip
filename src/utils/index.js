@@ -13,5 +13,6 @@ export {
   getTripDates,
   calcTripPrice,
   filterEvents,
+  extractEventTimeStatuses,
   sortEventsBy,
 } from './events.js';
