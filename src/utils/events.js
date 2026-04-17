@@ -78,9 +78,22 @@ function getTripDates(events) {
   };
 }
 
+function calcTripPrice(events, offers) {
+  return events.reduce((tripPrice, event) => {
+    const eventOffersPrice = event.offerIds.reduce(
+      (offersPrice, offerId) => offersPrice + offers[event.type][offerId].price,
+      0,
+    );
+
+    const eventPrice = event.basePrice + eventOffersPrice;
+    return tripPrice + eventPrice;
+  }, 0);
+}
+
 export {
   extractTripRoute,
   getTripDates,
+  calcTripPrice,
   filterEvents,
   sortEventsBy,
 };

@@ -11,6 +11,7 @@ export {
 export {
   extractTripRoute,
   getTripDates,
+  calcTripPrice,
   filterEvents,
   sortEventsBy,
 } from './events.js';

@@ -13,7 +13,7 @@ function createTripSummaryTitleTemplate(route) {
   return `<h2 class="trip-header__title">${title}</h2>`;
 }
 
-function createTripSummaryTemplate({ route, dates }) {
+function createTripSummaryTemplate({ route, dates, price }) {
   const { startDate, endDate } = dates;
   const [formattedStartDate, formattedEndDate] = formatDateRange(startDate, endDate);
 
@@ -23,7 +23,7 @@ function createTripSummaryTemplate({ route, dates }) {
       <p class="trip-header__dates">
         <time datetime="${startDate}">${formattedStartDate}</time> &mdash; <time datetime="${endDate}">${formattedEndDate}</time>
       </p>
-      <p class="trip-header__price">Total: €&nbsp;1415</p>
+      <p class="trip-header__price">Total: €&nbsp;${price}</p>
     </div>`
   );
 }
@@ -31,17 +31,20 @@ function createTripSummaryTemplate({ route, dates }) {
 export default class TripSummary extends AbstractView {
   #route = null;
   #dates = null;
+  #price = null;
 
-  constructor({ route, dates }) {
+  constructor({ route, dates, price }) {
     super();
     this.#route = route;
     this.#dates = dates;
+    this.#price = price;
   }
 
   _getTemplate() {
     return createTripSummaryTemplate({
       route: this.#route,
       dates: this.#dates,
+      price: this.#price,
     });
   }
 }
