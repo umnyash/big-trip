@@ -1,4 +1,5 @@
 import { AbstractView } from '../framework';
+import { formatDateRange } from '../utils';
 
 const MAX_DESTINATIONS_IN_TITLE = 3;
 
@@ -12,12 +13,15 @@ function createTripSummaryTitleTemplate(route) {
   return `<h2 class="trip-header__title">${title}</h2>`;
 }
 
-function createTripSummaryTemplate({ route }) {
+function createTripSummaryTemplate({ route, dates }) {
+  const { startDate, endDate } = dates;
+  const [formattedStartDate, formattedEndDate] = formatDateRange(startDate, endDate);
+
   return (
     `<div class="trip-header__summary">
       ${createTripSummaryTitleTemplate(route)}
       <p class="trip-header__dates">
-        <time datetime="2026-08-14">14</time> &mdash; <time datetime="2026-08-16">16 Aug</time>
+        <time datetime="${startDate}">${formattedStartDate}</time> &mdash; <time datetime="${endDate}">${formattedEndDate}</time>
       </p>
       <p class="trip-header__price">Total: €&nbsp;1415</p>
     </div>`
@@ -26,15 +30,18 @@ function createTripSummaryTemplate({ route }) {
 
 export default class TripSummary extends AbstractView {
   #route = null;
+  #dates = null;
 
-  constructor({ route }) {
+  constructor({ route, dates }) {
     super();
     this.#route = route;
+    this.#dates = dates;
   }
 
   _getTemplate() {
     return createTripSummaryTemplate({
       route: this.#route,
+      dates: this.#dates,
     });
   }
 }

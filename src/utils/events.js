@@ -55,4 +55,32 @@ function extractTripRoute(events, destinations) {
   }, []);
 }
 
-export { extractTripRoute, filterEvents, sortEventsBy };
+function getTripDates(events) {
+  let startDate = new Date(events[0].startDate);
+  let endDate = new Date(events[0].endDate);
+
+  events.forEach((event) => {
+    const eventStartDate = new Date(event.startDate);
+    const eventEndDate = new Date(event.endDate);
+
+    if (eventStartDate < startDate) {
+      startDate = eventStartDate;
+    }
+
+    if (eventEndDate > endDate) {
+      endDate = eventEndDate;
+    }
+  });
+
+  return {
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString(),
+  };
+}
+
+export {
+  extractTripRoute,
+  getTripDates,
+  filterEvents,
+  sortEventsBy,
+};

@@ -8,4 +8,9 @@ export {
   getFormattedDuration,
 } from './date.js';
 
-export { extractTripRoute, filterEvents, sortEventsBy } from './events.js';
+export {
+  extractTripRoute,
+  getTripDates,
+  filterEvents,
+  sortEventsBy,
+} from './events.js';

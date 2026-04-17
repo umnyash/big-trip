@@ -3,6 +3,7 @@ import { TimeStatus, SortType } from '../constants.js';
 
 import {
   extractTripRoute,
+  getTripDates,
   filterEvents,
   sortEventsBy,
   updateArrayItemById,
@@ -55,6 +56,7 @@ export default class TripPresenter {
   #renderSummary() {
     this.#summaryComponent = new TripSummary({
       route: extractTripRoute(this.#allEvents, this.#destinations),
+      dates: getTripDates(this.#allEvents),
     });
 
     render(this.#summaryComponent, this.#headerElement);
