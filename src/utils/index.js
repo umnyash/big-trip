@@ -4,6 +4,7 @@ export {
   calcDuration,
   formatTime,
   formatDay,
+  formatDateRange,
   getFormattedDuration,
 } from './date.js';
 
