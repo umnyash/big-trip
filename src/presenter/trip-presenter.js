@@ -168,9 +168,10 @@ export default class TripPresenter {
     updateArrayItemById(this.#displayedEvents, eventData);
     updateArrayItemById(this.#allEvents, eventData);
 
+    this.#clearEvents();
+    this.#filterEvents();
     this.#sortEvents();
-    this.#clearEventList();
-    this.#renderEventCards();
+    this.#renderEvents();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
