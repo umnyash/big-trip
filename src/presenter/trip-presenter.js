@@ -8,7 +8,6 @@ import {
   filterEvents,
   extractEventTimeStatuses,
   sortEventsBy,
-  updateArrayItemById,
 } from '../utils';
 
 import EventPresenter from './event-presenter.js';
@@ -22,10 +21,6 @@ import TripMessage, { MessageVariant } from '../view/trip-message-view.js';
 export default class TripPresenter {
   #headerElement = null;
   #model = null;
-  #destinations = null;
-  #allEvents = [];
-  #displayedEvents = [];
-  #offers = null;
 
   #summaryComponent = null;
   #filterComponent = null;
@@ -45,13 +40,27 @@ export default class TripPresenter {
     this.#model = model;
   }
 
-  init() {
-    this.#destinations = this.#model.destinations;
-    this.#allEvents = [...this.#model.events];
-    this.#displayedEvents = this.#model.events;
-    this.#offers = this.#model.offers;
+  get #destinations() {
+    return this.#model.destinations;
+  }
 
-    this.#sortEvents();
+  get #offers() {
+    return this.#model.offers;
+  }
+
+  get #allEvents() {
+    return this.#model.events;
+  }
+
+  get #displayedEvents() {
+    const filteredEvents = this.#filter
+      ? filterEvents(this.#allEvents, this.#filter)
+      : this.#allEvents;
+
+    return sortEventsBy(filteredEvents, this.#sortType);
+  }
+
+  init() {
     this.#render();
   }
 
@@ -179,39 +188,22 @@ export default class TripPresenter {
     this.#addEventButtonComponent = null;
   }
 
-  #sortEvents() {
-    this.#displayedEvents = sortEventsBy(this.#displayedEvents, this.#sortType);
-  }
-
-  #filterEvents() {
-    this.#displayedEvents = this.#filter
-      ? filterEvents(this.#allEvents, this.#filter)
-      : this.#allEvents;
-  }
-
   #filterChangeHandler = (filter) => {
     this.#filter = filter;
     this.#sortType = this.#defaultSortType;
     this.#clearEvents();
-    this.#filterEvents();
-    this.#sortEvents();
     this.#renderEvents();
   };
 
   #sortChangeHandler = (value) => {
     this.#sortType = value;
-    this.#sortEvents();
     this.#clearEventList();
     this.#renderEventCards();
   };
 
   #eventUpdateHandler = (eventData) => {
-    updateArrayItemById(this.#displayedEvents, eventData);
-    updateArrayItemById(this.#allEvents, eventData);
-
+    this.#model.updateEvent(eventData);
     this.#clear();
-    this.#filterEvents();
-    this.#sortEvents();
     this.#render();
   };
 
