@@ -127,6 +127,7 @@ export default class TripPresenter {
       onEventEnterEditMode: this.#eventEnterEditModeHandler,
       onEventExitEditMode: this.#eventExitEditModeHandler,
       onEventUpdate: this.#eventUpdateHandler,
+      onEventDelete: this.#eventDeleteHandler,
     });
 
     this.#eventPresenters.set(event.id, eventPresenter);
@@ -203,6 +204,12 @@ export default class TripPresenter {
 
   #eventUpdateHandler = (eventData) => {
     this.#model.updateEvent(eventData);
+    this.#clear();
+    this.#render();
+  };
+
+  #eventDeleteHandler = (eventId) => {
+    this.#model.deleteEvent(eventId);
     this.#clear();
     this.#render();
   };

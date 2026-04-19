@@ -1,5 +1,5 @@
 import { mockDestinations, mockOffers, generateMockEvents } from '../mocks';
-import { updateArrayItemById } from '../utils';
+import { updateArrayItemById, deleteArrayItemById } from '../utils';
 
 const SOME_EVENTS_COUNT = 4;
 
@@ -22,5 +22,9 @@ export default class TripModel {
 
   updateEvent(eventData) {
     updateArrayItemById(this.#events, eventData);
+  }
+
+  deleteEvent(eventId) {
+    deleteArrayItemById(this.#events, eventId);
   }
 }

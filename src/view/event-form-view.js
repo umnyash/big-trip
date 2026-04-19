@@ -202,7 +202,7 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
               <button class="event-form__cancel-button button button--simple button--size_s" type="button">
                 Cancel
               </button>` : `
-              <button class="button button--simple button--size_s" type="button">
+              <button class="event-form__delete-button button button--simple button--size_s" type="button">
                 Delete
               </button>
             `}
@@ -224,6 +224,7 @@ export default class EventFormView extends AbstractStatefulView {
   #destinations = null;
   #offers = null;
   #onFormSubmit = null;
+  #onDeleteButtonClick = null;
   #onCloseButtonClick = null;
 
   #destinationNameToIdMap = null;
@@ -231,12 +232,20 @@ export default class EventFormView extends AbstractStatefulView {
   #startDatePicker = null;
   #endDatePicker = null;
 
-  constructor({ event = newEvent, destinations, offers, onFormSubmit, onCloseButtonClick }) {
+  constructor({
+    event = newEvent,
+    destinations,
+    offers,
+    onFormSubmit,
+    onDeleteButtonClick,
+    onCloseButtonClick,
+  }) {
     super();
 
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onFormSubmit = onFormSubmit;
+    this.#onDeleteButtonClick = onDeleteButtonClick;
     this.#onCloseButtonClick = onCloseButtonClick;
 
     const {
@@ -297,6 +306,9 @@ export default class EventFormView extends AbstractStatefulView {
 
     this.element.querySelectorAll('.event-form__cancel-button, .event-form__close-button')
       .forEach((buttonElement) => buttonElement.addEventListener('click', this.#closeButtonClickHandler));
+
+    this.element.querySelector('.event-form__delete-button')
+      ?.addEventListener('click', this.#deleteButtonClickHandler);
 
     this.#setDatePickers();
   }
@@ -551,6 +563,10 @@ export default class EventFormView extends AbstractStatefulView {
     }
 
     this.#onFormSubmit(this.#extractEventFromState(this._state));
+  };
+
+  #deleteButtonClickHandler = () => {
+    this.#onDeleteButtonClick(this._state.id);
   };
 
   #closeButtonClickHandler = () => {
