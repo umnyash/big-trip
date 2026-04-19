@@ -29,4 +29,14 @@ function updateArrayItemById(array, updatedItem) {
   array[itemIndex] = updatedItem;
 }
 
-export { focusFieldAtEnd, isEscapeEvent, updateArrayItemById };
+function deleteArrayItemById(array, itemId) {
+  const itemIndex = array.findIndex(({ id }) => id === itemId);
+
+  if (itemIndex === -1) {
+    throw new Error(`Can't delete item. Id ${itemId} not found`);
+  }
+
+  array.splice(itemIndex, 1);
+}
+
+export { focusFieldAtEnd, isEscapeEvent, updateArrayItemById, deleteArrayItemById };
