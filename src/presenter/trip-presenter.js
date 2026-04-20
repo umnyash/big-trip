@@ -211,6 +211,11 @@ export default class TripPresenter {
   #eventDeleteHandler = (eventId) => {
     this.#model.deleteEvent(eventId);
     this.#clear();
+
+    if (!this.#allEvents.length) {
+      this.#filter = null;
+    }
+
     this.#render();
   };
 
