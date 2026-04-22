@@ -21,6 +21,13 @@ const DurationInMinutes = {
   MAX: 4320, // 3 days
 };
 
+function createEventIdGenerator() {
+  let eventNumber = 0;
+  return () => `event-${++eventNumber}-id`;
+}
+
+const generateMockEventId = createEventIdGenerator();
+
 function generateDates(baseDate) {
   const startDateOffset = generateRandomInt(StartDateOffsetInMinutes.MIN, StartDateOffsetInMinutes.MAX);
   const duration = generateRandomInt(DurationInMinutes.MIN, DurationInMinutes.MAX);
@@ -38,12 +45,12 @@ function generateMockEvents(count) {
   const destinationsIds = Object.keys(mockDestinations);
   const now = dayjs().second(0).millisecond(0);
 
-  return Array.from({ length: count }, (_item, index) => {
+  return Array.from({ length: count }, () => {
     const type = getRandomArrayItem(eventTypeIds);
     const offerIdsOfType = Object.keys(mockOffers[type]);
 
     return {
-      id: `event-${index + 1}-id`,
+      id: generateMockEventId(),
       type,
       destinationId: getRandomArrayItem(destinationsIds),
       ...generateDates(now),
@@ -54,4 +61,4 @@ function generateMockEvents(count) {
   });
 }
 
-export { generateMockEvents };
+export { generateMockEvents, generateMockEventId };
