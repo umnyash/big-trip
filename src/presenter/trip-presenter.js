@@ -169,14 +169,22 @@ export default class TripPresenter {
     this.#editingEventPresenter = null;
   }
 
+  #destroyEventList() {
+    remove(this.#eventListComponent);
+    this.#eventListComponent = null;
+  }
+
+  #destroyMessage() {
+    remove(this.#messageComponent);
+    this.#messageComponent = null;
+  }
+
   #clearEvents() {
     this.#clearEventList();
+    this.#destroyEventList();
+    this.#destroyMessage();
     remove(this.#sortComponent);
-    remove(this.#messageComponent);
-    remove(this.#eventListComponent);
     this.#sortComponent = null;
-    this.#eventListComponent = null;
-    this.#messageComponent = null;
   }
 
   #clear() {
