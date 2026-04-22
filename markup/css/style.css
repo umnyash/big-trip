@@ -917,6 +917,10 @@
   align-content: start;
 }
 
+.trip:not(:has(.trip__sort)) {
+  --trip-list-margin-top: 48px;
+}
+
 .trip:has(.trip__message) {
   grid-template-rows: auto 1fr;
 }
