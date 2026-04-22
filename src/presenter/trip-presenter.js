@@ -11,6 +11,7 @@ import {
 } from '../utils';
 
 import EventPresenter from './event-presenter.js';
+import NewEventFormPresenter from './new-event-form-presenter.js';
 import AddEventButtonView from '../view/add-event-button-view.js';
 import EventListView from '../view/event-list-view.js';
 import TripFilterView from '../view/trip-filter-view.js';
@@ -34,6 +35,7 @@ export default class TripPresenter {
   #filter = null;
   #eventPresenters = new Map();
   #editingEventPresenter = null;
+  #newEventFormPresenter = null;
 
   constructor({ headerElement, model }) {
     this.#headerElement = headerElement;
@@ -85,7 +87,10 @@ export default class TripPresenter {
   }
 
   #renderAddEventButtonComponent() {
-    this.#addEventButtonComponent = new AddEventButtonView();
+    this.#addEventButtonComponent = new AddEventButtonView({
+      onButtonClick: this.#addEventButtonClickHandler,
+    });
+
     render(this.#addEventButtonComponent, this.#headerElement);
   }
 
@@ -163,10 +168,16 @@ export default class TripPresenter {
     this.#renderEvents();
   }
 
+  #destroyNewEventForm() {
+    this.#newEventFormPresenter?.destroy();
+    this.#newEventFormPresenter = null;
+  }
+
   #clearEventList() {
     this.#eventPresenters.forEach((presenter) => presenter.destroy());
     this.#eventPresenters.clear();
     this.#editingEventPresenter = null;
+    this.#destroyNewEventForm();
   }
 
   #destroyEventList() {
@@ -197,6 +208,14 @@ export default class TripPresenter {
     this.#addEventButtonComponent = null;
   }
 
+  #resetFilter() {
+    this.#filterComponent.setFilter(null);
+  }
+
+  #resetSort() {
+    this.#sortComponent.setValue(this.#defaultSortType);
+  }
+
   #filterChangeHandler = (filter) => {
     this.#filter = filter;
     this.#sortType = this.#defaultSortType;
@@ -208,6 +227,12 @@ export default class TripPresenter {
     this.#sortType = value;
     this.#clearEventList();
     this.#renderEventCards();
+  };
+
+  #eventCreateHandler = (eventData) => {
+    this.#model.createEvent(eventData);
+    this.#clear();
+    this.#render();
   };
 
   #eventUpdateHandler = (eventData) => {
@@ -228,11 +253,50 @@ export default class TripPresenter {
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {
+    this.#destroyNewEventForm();
     this.#editingEventPresenter?.exitEditMode();
     this.#editingEventPresenter = eventPresenter;
   };
 
   #eventExitEditModeHandler = () => {
     this.#editingEventPresenter = null;
+  };
+
+  #newEventCancelHandler = () => {
+    this.#newEventFormPresenter = null;
+
+    if (!this.#displayedEvents.length) {
+      this.#destroyEventList();
+      this.#renderMessage();
+    }
+
+    this.#addEventButtonComponent.enable();
+  };
+
+  #addEventButtonClickHandler = () => {
+    this.#editingEventPresenter?.exitEditMode();
+
+    if (this.#filter) {
+      this.#resetFilter();
+    } else if (this.#sortType !== this.#defaultSortType) {
+      this.#resetSort();
+    }
+
+    if (!this.#displayedEvents.length) {
+      this.#destroyMessage();
+      this.#renderEventList();
+    }
+
+    this.#addEventButtonComponent.disable();
+
+    this.#newEventFormPresenter = new NewEventFormPresenter({
+      containerElement: this.#eventListComponent.element,
+      destinations: this.#destinations,
+      offers: this.#offers,
+      onEventCancel: this.#newEventCancelHandler,
+      onEventCreate: this.#eventCreateHandler,
+    });
+
+    this.#newEventFormPresenter.init();
   };
 }

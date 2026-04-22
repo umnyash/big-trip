@@ -56,6 +56,11 @@ export default class TripFilterView extends AbstractView {
     return createTripFilterTemplate(this.#filter, this.#availableTimeStatuses);
   }
 
+  setFilter(filter) {
+    this.element.querySelector(`[value="${filter ?? ''}"]`).checked = true;
+    this.#onFilterChange(filter);
+  }
+
   #formChangeHandler = (evt) => {
     this.#onFilterChange(evt.target.value || null);
   };

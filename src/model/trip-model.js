@@ -1,4 +1,4 @@
-import { mockDestinations, mockOffers, generateMockEvents } from '../mocks';
+import { mockDestinations, mockOffers, generateMockEvents, generateMockEventId } from '../mocks';
 import { updateArrayItemById, deleteArrayItemById } from '../utils';
 
 const SOME_EVENTS_COUNT = 4;
@@ -10,6 +10,13 @@ export default class TripModel {
 
   get events() {
     return this.#events;
+  }
+
+  createEvent(eventData) {
+    this.#events.push({
+      id: generateMockEventId(),
+      ...eventData,
+    });
   }
 
   updateEvent(eventData) {

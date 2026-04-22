@@ -56,6 +56,11 @@ export default class TripSortView extends AbstractView {
     return createTripSortTemplate(this.#value);
   }
 
+  setValue(value) {
+    this.element.querySelector(`[value="${value}"]`).checked = true;
+    this.#onValueChange(value);
+  }
+
   #formChangeHandler = (evt) => {
     this.#onValueChange(evt.target.value);
   };
