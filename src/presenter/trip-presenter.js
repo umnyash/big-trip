@@ -62,6 +62,19 @@ export default class TripPresenter {
     return sortEventsBy(filteredEvents, this.#sortType);
   }
 
+  get #messageVariant() {
+    switch (this.#filter) {
+      case TimeStatus.PAST:
+        return MessageVariant.NoPastEvents;
+      case TimeStatus.ONGOING:
+        return MessageVariant.NoOngoingEvents;
+      case TimeStatus.UPCOMING:
+        return MessageVariant.NoUpcomingEvents;
+      default:
+        return MessageVariant.NoEvents;
+    }
+  }
+
   async init() {
     await this.#model.init();
     this.#render();
@@ -96,23 +109,7 @@ export default class TripPresenter {
   }
 
   #renderMessage() {
-    let messageVariant;
-
-    switch (this.#filter) {
-      case TimeStatus.PAST:
-        messageVariant = MessageVariant.NoPastEvents;
-        break;
-      case TimeStatus.ONGOING:
-        messageVariant = MessageVariant.NoOngoingEvents;
-        break;
-      case TimeStatus.UPCOMING:
-        messageVariant = MessageVariant.NoUpcomingEvents;
-        break;
-      default:
-        messageVariant = MessageVariant.NoEvents;
-    }
-
-    this.#messageComponent = new TripMessage({ variant: messageVariant });
+    this.#messageComponent = new TripMessage({ variant: this.#messageVariant });
     render(this.#messageComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 
