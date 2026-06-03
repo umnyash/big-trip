@@ -1,5 +1,5 @@
 import { RenderPosition, render, remove } from '../framework';
-import { TimeStatus, SortType } from '../constants.js';
+import { RequestStatus, TimeStatus, SortType } from '../constants.js';
 
 import {
   extractTripRoute,
@@ -37,6 +37,8 @@ export default class TripPresenter {
   #editingEventPresenter = null;
   #newEventFormPresenter = null;
 
+  #loadingStatus = RequestStatus.PENDING;
+
   constructor({ headerElement, model }) {
     this.#headerElement = headerElement;
     this.#model = model;
@@ -63,6 +65,14 @@ export default class TripPresenter {
   }
 
   get #messageVariant() {
+    if (this.#loadingStatus === RequestStatus.PENDING) {
+      return MessageVariant.Loading;
+    }
+
+    if (this.#loadingStatus === RequestStatus.ERROR) {
+      return MessageVariant.LoadFailed;
+    }
+
     switch (this.#filter) {
       case TimeStatus.PAST:
         return MessageVariant.NoPastEvents;
@@ -76,7 +86,16 @@ export default class TripPresenter {
   }
 
   async init() {
-    await this.#model.init();
+    this.#render();
+
+    try {
+      await this.#model.init();
+      this.#loadingStatus = RequestStatus.SUCCESS;
+    } catch {
+      this.#loadingStatus = RequestStatus.ERROR;
+    }
+
+    this.#clear();
     this.#render();
   }
 
@@ -163,6 +182,13 @@ export default class TripPresenter {
 
     this.#renderFilter();
     this.#renderAddEventButtonComponent();
+
+    if (this.#loadingStatus !== RequestStatus.SUCCESS) {
+      this.#addEventButtonComponent.disable();
+      this.#renderMessage();
+      return;
+    }
+
     this.#renderEvents();
   }
 
