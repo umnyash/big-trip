@@ -62,7 +62,8 @@ export default class TripPresenter {
     return sortEventsBy(filteredEvents, this.#sortType);
   }
 
-  init() {
+  async init() {
+    await this.#model.init();
     this.#render();
   }
 
