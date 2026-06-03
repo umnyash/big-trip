@@ -1,9 +1,4 @@
-export {
-  focusFieldAtEnd,
-  isEscapeEvent,
-  updateArrayItemById,
-  deleteArrayItemById,
-} from './common.js';
+export { focusFieldAtEnd, isEscapeEvent } from './common.js';
 
 export {
   calcDuration,

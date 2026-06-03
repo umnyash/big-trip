@@ -270,20 +270,20 @@ export default class TripPresenter {
     this.#renderEventCards();
   };
 
-  #eventCreateHandler = (eventData) => {
-    this.#model.createEvent(eventData);
+  #eventCreateHandler = async (eventData) => {
+    await this.#model.createEvent(eventData);
     this.#clear();
     this.#render();
   };
 
-  #eventUpdateHandler = (eventData) => {
-    this.#model.updateEvent(eventData);
+  #eventUpdateHandler = async (eventData) => {
+    await this.#model.updateEvent(eventData);
     this.#clear();
     this.#render();
   };
 
-  #eventDeleteHandler = (eventId) => {
-    this.#model.deleteEvent(eventId);
+  #eventDeleteHandler = async (eventId) => {
+    await this.#model.deleteEvent(eventId);
     this.#clear();
 
     if (!this.#allEvents.length) {

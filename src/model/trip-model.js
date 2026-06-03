@@ -1,6 +1,3 @@
-import { generateMockEventId } from '../mocks';
-import { updateArrayItemById, deleteArrayItemById } from '../utils';
-
 export default class TripModel {
   #tripApiService = null;
 
@@ -36,18 +33,42 @@ export default class TripModel {
     }
   }
 
-  createEvent(eventData) {
-    this.#events.push({
-      id: generateMockEventId(),
-      ...eventData,
-    });
+  async createEvent(eventData) {
+    try {
+      const newEvent = await this.#tripApiService.createEvent(eventData);
+      this.#events.push(newEvent);
+    } catch {
+      throw new Error('Can\'t create event');
+    }
   }
 
-  updateEvent(eventData) {
-    updateArrayItemById(this.#events, eventData);
+  async updateEvent(eventData) {
+    const eventIndex = this.#events.findIndex(({ id }) => id === eventData.id);
+
+    if (eventIndex === -1) {
+      throw new Error(`Can't update unexisting event (id: ${eventData.id})`);
+    }
+
+    try {
+      const updatedEvent = await this.#tripApiService.updateEvent(eventData);
+      this.#events[eventIndex] = updatedEvent;
+    } catch {
+      throw new Error(`Can't update event (id: ${eventData.id})`);
+    }
   }
 
-  deleteEvent(eventId) {
-    deleteArrayItemById(this.#events, eventId);
+  async deleteEvent(eventId) {
+    const eventIndex = this.#events.findIndex(({ id }) => id === eventId);
+
+    if (eventIndex === -1) {
+      throw new Error(`Can't delete unexisting event (id: ${eventId})`);
+    }
+
+    try {
+      await this.#tripApiService.deleteEvent(eventId);
+      this.#events.splice(eventIndex, 1);
+    } catch {
+      throw new Error(`Can't delete event (id: ${eventId})`);
+    }
   }
 }
