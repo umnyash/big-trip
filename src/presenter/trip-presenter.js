@@ -271,26 +271,38 @@ export default class TripPresenter {
   };
 
   #eventCreateHandler = async (eventData) => {
-    await this.#model.createEvent(eventData);
-    this.#clear();
-    this.#render();
+    try {
+      await this.#model.createEvent(eventData);
+      this.#clear();
+      this.#render();
+    } catch {
+      this.#newEventFormPresenter.setFailed();
+    }
   };
 
   #eventUpdateHandler = async (eventData) => {
-    await this.#model.updateEvent(eventData);
-    this.#clear();
-    this.#render();
+    try {
+      await this.#model.updateEvent(eventData);
+      this.#clear();
+      this.#render();
+    } catch {
+      this.#eventPresenters.get(eventData.id).setFailed();
+    }
   };
 
   #eventDeleteHandler = async (eventId) => {
-    await this.#model.deleteEvent(eventId);
-    this.#clear();
+    try {
+      await this.#model.deleteEvent(eventId);
+      this.#clear();
 
-    if (!this.#allEvents.length) {
-      this.#filter = null;
+      if (!this.#allEvents.length) {
+        this.#filter = null;
+      }
+
+      this.#render();
+    } catch {
+      this.#eventPresenters.get(eventId).setFailed();
     }
-
-    this.#render();
   };
 
   #eventEnterEditModeHandler = (eventPresenter) => {

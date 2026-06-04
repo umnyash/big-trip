@@ -313,6 +313,10 @@ export default class EventFormView extends AbstractStatefulView {
     this.#setDatePickers();
   }
 
+  setFailed() {
+    this.shake(this.element.firstElementChild);
+  }
+
   #createDatePicker(element, options) {
     return flatpickr(element, {
       dateFormat: 'd/m/y H:i',

@@ -86,6 +86,10 @@ export default class EventCardView extends AbstractView {
     });
   }
 
+  setFailed() {
+    this.shake(this.element.firstElementChild);
+  }
+
   #editButtonClickHandler = () => {
     this.#onEditButtonClick();
   };

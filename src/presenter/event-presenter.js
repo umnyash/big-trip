@@ -53,6 +53,11 @@ export default class EventPresenter {
     this.#cardComponent = newCardComponent;
   }
 
+  setFailed() {
+    this.#cardComponent?.setFailed();
+    this.#formComponent?.setFailed();
+  }
+
   #createCardComponent() {
     return new EventCardView({
       event: this.#event,
