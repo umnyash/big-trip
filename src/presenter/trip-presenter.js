@@ -271,6 +271,8 @@ export default class TripPresenter {
   };
 
   #eventCreateHandler = async (eventData) => {
+    this.#newEventFormPresenter.setSaving();
+
     try {
       await this.#model.createEvent(eventData);
       this.#clear();
@@ -281,6 +283,8 @@ export default class TripPresenter {
   };
 
   #eventUpdateHandler = async (eventData) => {
+    this.#eventPresenters.get(eventData.id).setSaving();
+
     try {
       await this.#model.updateEvent(eventData);
       this.#clear();
@@ -291,6 +295,8 @@ export default class TripPresenter {
   };
 
   #eventDeleteHandler = async (eventId) => {
+    this.#eventPresenters.get(eventId).setDeleting();
+
     try {
       await this.#model.deleteEvent(eventId);
       this.#clear();

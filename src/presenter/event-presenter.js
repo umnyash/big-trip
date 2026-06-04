@@ -53,6 +53,14 @@ export default class EventPresenter {
     this.#cardComponent = newCardComponent;
   }
 
+  setSaving() {
+    this.#formComponent?.setSaving();
+  }
+
+  setDeleting() {
+    this.#formComponent?.setDeleting();
+  }
+
   setFailed() {
     this.#cardComponent?.setFailed();
     this.#formComponent?.setFailed();

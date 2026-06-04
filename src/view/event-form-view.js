@@ -6,6 +6,12 @@ import { calcDuration, focusFieldAtEnd } from '../utils';
 
 const DEFAULT_EVENT_TYPE = 'flight';
 
+const FormStatus = {
+  IDLE: 'idle',
+  SAVING: 'saving',
+  DELETING: 'deleting',
+};
+
 const ValidationErrorText = {
   DESTINATION_REQUIRED: 'Please enter a destination',
   DESTINATION_INVALID: 'Please select a destination from the list',
@@ -25,13 +31,14 @@ const newEvent = {
   offerIds: [],
 };
 
-function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen) {
+function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen, isDisabled) {
   return (
     `<div class="event-form__type-dropdown dropdown">
       <button
         class="dropdown__toggle-button dropdown__toggle-button--icon"
         type="button"
         aria-expanded="${isTypeDropdownOpen}"
+        ${isDisabled ? 'disabled' : ''}
       >
         <span class="visually-hidden">Event type:</span>
         <span class="dropdown__toggle-icon event-icon event-icon--accent">
@@ -48,6 +55,7 @@ function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen)
                 type="radio"
                 value="${id}"
                 ${id === selectedTypeId ? 'checked' : ''}
+                ${isDisabled ? 'disabled' : ''}
               >
               <span class="dropdown__option-label">
                 <img class="dropdown__option-icon" src="${eventTypes[id].iconUrl}" width="18" height="18" alt="">
@@ -61,7 +69,7 @@ function createEventFormTypeDropdownTemplate(selectedTypeId, isTypeDropdownOpen)
   );
 }
 
-function createEventFormDestinationFieldTemplate(destinationNames, value = '', eventId) {
+function createEventFormDestinationFieldTemplate({ destinationNames, value = '', eventId, isDisabled }) {
   const dataListId = `${eventId ? `event-${eventId}` : 'new-event'}-destinations-data-list`;
 
   return (
@@ -73,6 +81,7 @@ function createEventFormDestinationFieldTemplate(destinationNames, value = '', e
         name="destination"
         value="${value}"
         list="${dataListId}"
+        ${isDisabled ? 'disabled' : ''}
       >
       <datalist id="${dataListId}">
         ${destinationNames.map((name) => `
@@ -83,7 +92,7 @@ function createEventFormDestinationFieldTemplate(destinationNames, value = '', e
   );
 }
 
-function createEventFormOffersTemplate(offers, selectedOfferIds) {
+function createEventFormOffersTemplate(offers, selectedOfferIds, isDisabled) {
   const offersIds = Object.keys(offers);
 
   if (!offersIds.length) {
@@ -102,6 +111,7 @@ function createEventFormOffersTemplate(offers, selectedOfferIds) {
               name="offer-ids"
               value="${id}"
               ${selectedOfferIds?.has(id) ? 'checked' : ''}
+              ${isDisabled ? 'disabled' : ''}
             >
             <span class="checker__label">
               ${offers[id].title} +&#8288;€&nbsp;${offers[id].price}
@@ -155,6 +165,7 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
     startDateError,
     endDateError,
     basePriceError,
+    formStatus,
   } = state;
 
   const isNew = !id;
@@ -163,47 +174,48 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
   const typeTitle = eventTypes[type].title;
   const selectedOfferIds = selectedOfferIdsByType[type];
   const datesError = startDateError || endDateError;
+  const isDisabled = formStatus !== FormStatus.IDLE;
 
   return (
     `<li class="event-list__item">
       <form class="event-list__form event-form" action="https://echo.htmlacademy.ru" method="post" novalidate>
         <div class="event-form__header">
           <h3 class="visually-hidden">${formTitle}</h3>
-          ${createEventFormTypeDropdownTemplate(type, isTypeDropdownOpen)}
+          ${createEventFormTypeDropdownTemplate(type, isTypeDropdownOpen, isDisabled)}
           <div class="event-form__field-wrapper event-form__field-wrapper--title">
             <span id="event-form-type">${typeTitle}</span>
-            ${createEventFormDestinationFieldTemplate(destinationNames, destinationFieldValue, id)}
+            ${createEventFormDestinationFieldTemplate({ destinationNames, value: destinationFieldValue, eventId: id, isDisabled })}
             ${destinationError ? `<p class="event-form__field-error">${destinationError}</p>` : ''}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--dates">
             <label class="event-form__field">
               <span class="visually-hidden">From:</span>
-              <input class="event-form__field-control" type="text" name="start-date" value="">
+              <input class="event-form__field-control" type="text" name="start-date" value="" ${isDisabled ? 'disabled' : ''}>
             </label>
             &mdash;
             <label class="event-form__field">
               <span class="visually-hidden">To:</span>
-              <input class="event-form__field-control" type="text" name="end-date" value="">
+              <input class="event-form__field-control" type="text" name="end-date" value="" ${isDisabled ? 'disabled' : ''}>
             </label>
             ${datesError ? `<p class="event-form__field-error">${datesError}</p>` : ''}
           </div>
           <div class="event-form__field-wrapper event-form__field-wrapper--price">
             <label class="event-form__field">
               <span class="visually-hidden">Base price:</span>€
-              <input class="event-form__field-control" type="number" name="base-price" value="${basePrice}" min="1">
+              <input class="event-form__field-control" type="number" name="base-price" value="${basePrice}" min="1" ${isDisabled ? 'disabled' : ''}>
             </label>
             ${basePriceError ? `<p class="event-form__field-error">${basePriceError}</p>` : ''}
           </div>
           <div class="event-form__actions">
-            <button class="button button--primary button--size_s" type="submit">
-              Save
+            <button class="button button--primary button--size_s" type="submit" ${isDisabled ? 'disabled' : ''}>
+              ${formStatus === FormStatus.SAVING ? 'Saving...' : 'Save'}
             </button>
             ${isNew ? `
               <button class="event-form__cancel-button button button--simple button--size_s" type="button">
                 Cancel
               </button>` : `
-              <button class="event-form__delete-button button button--simple button--size_s" type="button">
-                Delete
+              <button class="event-form__delete-button button button--simple button--size_s" type="button" ${isDisabled ? 'disabled' : ''}>
+                ${formStatus === FormStatus.DELETING ? 'Deleting...' : 'Delete'}
               </button>
             `}
           </div>
@@ -213,7 +225,7 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
             </button>
           `}
         </div>
-        ${createEventFormOffersTemplate(offers, selectedOfferIds)}
+        ${createEventFormOffersTemplate(offers, selectedOfferIds, isDisabled)}
         ${createEventFormDestinationTemplate(destination)}
       </form>
     </li>`
@@ -313,8 +325,18 @@ export default class EventFormView extends AbstractStatefulView {
     this.#setDatePickers();
   }
 
+  setSaving() {
+    this.updateElement({ formStatus: FormStatus.SAVING });
+  }
+
+  setDeleting() {
+    this.updateElement({ formStatus: FormStatus.DELETING });
+  }
+
   setFailed() {
-    this.shake(this.element.firstElementChild);
+    this.shake(this.element.firstElementChild, () => {
+      this.updateElement({ formStatus: FormStatus.IDLE });
+    });
   }
 
   #createDatePicker(element, options) {
@@ -611,6 +633,7 @@ export default class EventFormView extends AbstractStatefulView {
       endDateError: null,
       basePriceError: null,
       shouldValidateOnInput: false,
+      formStatus: FormStatus.IDLE,
     };
 
     delete state.offerIds;

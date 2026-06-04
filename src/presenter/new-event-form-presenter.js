@@ -36,6 +36,10 @@ export default class NewEventFormPresenter {
     document.addEventListener('keydown', this.#documentKeyDownHandler);
   }
 
+  setSaving() {
+    this.#formComponent.setSaving();
+  }
+
   setFailed() {
     this.#formComponent.setFailed();
   }
