@@ -374,7 +374,6 @@
   padding: 0;
   border: none;
   background: none;
-  cursor: pointer;
   transition: opacity 200ms linear;
 }
 
@@ -392,11 +391,11 @@
   outline-offset: 2px;
 }
 
-.dropdown__toggle-button:hover {
+.dropdown__toggle-button:enabled:hover {
   opacity: 0.8;
 }
 
-.dropdown__toggle-button:active {
+.dropdown__toggle-button:enabled:active {
   opacity: 0.6;
 }
 
@@ -455,11 +454,11 @@
   max-height: 19px;
 }
 
-.dropdown__option-control:not(:checked) + .dropdown__option-label {
+.dropdown__option-control:enabled:not(:checked) + .dropdown__option-label {
   cursor: pointer;
 }
 
-.dropdown__option-control:not(:checked):hover + .dropdown__option-label {
+.dropdown__option-control:enabled:not(:checked):hover + .dropdown__option-label {
   background-color: var(--accent-color-60);
 }
 
