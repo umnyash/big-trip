@@ -666,6 +666,8 @@
   border: none;
   font: inherit;
   text-align: inherit;
+  color: inherit;
+  background: transparent;
   appearance: textfield;
 }
 
@@ -858,6 +860,10 @@
 .flatpickr-calendar .flatpickr-days .flatpickr-day.selected {
   background-color: var(--brand-color);
   border-color: var(--brand-color);
+}
+
+.flatpickr-input.flatpickr-input:disabled {
+  cursor: default;
 }
 
 /* #endregion */
