@@ -162,8 +162,7 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
     selectedOfferIdsByType,
     isTypeDropdownOpen,
     destinationError,
-    startDateError,
-    endDateError,
+    datesError,
     basePriceError,
     formStatus,
   } = state;
@@ -173,7 +172,6 @@ function createEventFormTemplate({ state, destinationNames, destination, offers 
   const formTitle = isNew ? 'Adding an event' : 'Editing an event';
   const typeTitle = eventTypes[type].title;
   const selectedOfferIds = selectedOfferIdsByType[type];
-  const datesError = startDateError || endDateError;
   const isDisabled = formStatus !== FormStatus.IDLE;
 
   return (
@@ -397,12 +395,16 @@ export default class EventFormView extends AbstractStatefulView {
     return destinationId ? null : ValidationErrorText.DESTINATION_INVALID;
   }
 
-  #validateStartDate(value) {
-    return value ? null : ValidationErrorText.START_DATE_REQUIRED;
-  }
+  #validateDates(startDate, endDate) {
+    if (!startDate) {
+      return ValidationErrorText.START_DATE_REQUIRED;
+    }
 
-  #validateEndDate(value) {
-    return value ? null : ValidationErrorText.END_DATE_REQUIRED;
+    if (!endDate) {
+      return ValidationErrorText.END_DATE_REQUIRED;
+    }
+
+    return null;
   }
 
   #validateBasePrice(value) {
@@ -420,8 +422,7 @@ export default class EventFormView extends AbstractStatefulView {
   #validate() {
     return {
       destinationError: this.#validateDestination(this._state.destinationFieldValue),
-      startDateError: this.#validateStartDate(this._state.startDate),
-      endDateError: this.#validateEndDate(this._state.endDate),
+      datesError: this.#validateDates(this._state.startDate, this._state.endDate),
       basePriceError: this.#validateBasePrice(this._state.basePrice),
     };
   }
@@ -503,10 +504,10 @@ export default class EventFormView extends AbstractStatefulView {
 
     const dateString = date.toISOString();
 
-    if (this._state.shouldValidateOnInput && this._state.startDateError) {
+    if (this._state.shouldValidateOnInput && this._state.datesError) {
       this.updateElement({
         startDate: dateString,
-        startDateError: this.#validateStartDate(dateString),
+        datesError: this.#validateDates(dateString, this._state.endDate),
       });
     } else {
       this._updateState({ startDate: dateString });
@@ -518,10 +519,10 @@ export default class EventFormView extends AbstractStatefulView {
   #endDateChangeHandler = ([date]) => {
     const dateString = date.toISOString();
 
-    if (this._state.shouldValidateOnInput && this._state.endDateError) {
+    if (this._state.shouldValidateOnInput && this._state.datesError) {
       this.updateElement({
         endDate: dateString,
-        endDateError: this.#validateEndDate(dateString),
+        datesError: this.#validateDates(this._state.startDate, dateString),
       });
 
       return;
@@ -629,8 +630,7 @@ export default class EventFormView extends AbstractStatefulView {
       selectedOfferIdsByType: { [event.type]: new Set(event.offerIds) },
       isTypeDropdownOpen: false,
       destinationError: null,
-      startDateError: null,
-      endDateError: null,
+      datesError: null,
       basePriceError: null,
       shouldValidateOnInput: false,
       formStatus: FormStatus.IDLE,
