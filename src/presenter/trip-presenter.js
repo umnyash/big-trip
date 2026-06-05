@@ -1,4 +1,4 @@
-import { RenderPosition, render, remove } from '../framework';
+import { RenderPosition, render, remove, UiBlocker } from '../framework';
 import { RequestStatus, TimeStatus, SortType } from '../constants.js';
 
 import {
@@ -36,6 +36,11 @@ export default class TripPresenter {
   #eventPresenters = new Map();
   #editingEventPresenter = null;
   #newEventFormPresenter = null;
+
+  #uiBlocker = new UiBlocker({
+    delay: 350,
+    minDuration: 1000,
+  });
 
   #loadingStatus = RequestStatus.PENDING;
 
@@ -271,6 +276,7 @@ export default class TripPresenter {
   };
 
   #eventCreateHandler = async (eventData) => {
+    this.#uiBlocker.block();
     this.#newEventFormPresenter.setSaving();
 
     try {
@@ -279,10 +285,13 @@ export default class TripPresenter {
       this.#render();
     } catch {
       this.#newEventFormPresenter.setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #eventUpdateHandler = async (eventData) => {
+    this.#uiBlocker.block();
     this.#eventPresenters.get(eventData.id).setSaving();
 
     try {
@@ -291,10 +300,13 @@ export default class TripPresenter {
       this.#render();
     } catch {
       this.#eventPresenters.get(eventData.id).setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #eventDeleteHandler = async (eventId) => {
+    this.#uiBlocker.block();
     this.#eventPresenters.get(eventId).setDeleting();
 
     try {
@@ -308,6 +320,8 @@ export default class TripPresenter {
       this.#render();
     } catch {
       this.#eventPresenters.get(eventId).setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
