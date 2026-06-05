@@ -17,6 +17,7 @@ const ValidationErrorText = {
   DESTINATION_INVALID: 'Please select a destination from the list',
   START_DATE_REQUIRED: 'Please select a start date',
   END_DATE_REQUIRED: 'Please select an end date',
+  DATE_RANGE_INVALID: 'End date must be later than start date',
   BASE_PRICE_REQUIRED: 'Please enter a price',
   BASE_PRICE_INVALID: 'Price must be a positive integer',
 };
@@ -404,7 +405,9 @@ export default class EventFormView extends AbstractStatefulView {
       return ValidationErrorText.END_DATE_REQUIRED;
     }
 
-    return null;
+    return new Date(endDate) - new Date(startDate) > 0
+      ? null
+      : ValidationErrorText.DATE_RANGE_INVALID;
   }
 
   #validateBasePrice(value) {
