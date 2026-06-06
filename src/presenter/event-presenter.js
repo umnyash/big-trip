@@ -66,6 +66,21 @@ export default class EventPresenter {
     this.#formComponent?.setFailed();
   }
 
+  exitEditMode() {
+    this.#cardComponent = this.#createCardComponent();
+    replace(this.#cardComponent, this.#formComponent);
+    document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    this.#formComponent.removeElement();
+    this.#formComponent = null;
+    this.#onEventExitEditMode();
+  }
+
+  destroy() {
+    document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    remove(this.#cardComponent);
+    remove(this.#formComponent);
+  }
+
   #createCardComponent() {
     return new EventCardView({
       event: this.#event,
@@ -93,21 +108,6 @@ export default class EventPresenter {
     document.addEventListener('keydown', this.#documentKeyDownHandler);
     this.#cardComponent = null;
     this.#onEventEnterEditMode(this);
-  }
-
-  exitEditMode() {
-    this.#cardComponent = this.#createCardComponent();
-    replace(this.#cardComponent, this.#formComponent);
-    document.removeEventListener('keydown', this.#documentKeyDownHandler);
-    this.#formComponent.removeElement();
-    this.#formComponent = null;
-    this.#onEventExitEditMode();
-  }
-
-  destroy() {
-    document.removeEventListener('keydown', this.#documentKeyDownHandler);
-    remove(this.#cardComponent);
-    remove(this.#formComponent);
   }
 
   #cardEditButtonClickHandler = () => {
