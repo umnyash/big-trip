@@ -52,6 +52,7 @@ export default class TripModel {
     try {
       const updatedEvent = await this.#tripApiService.updateEvent(eventData);
       this.#events[eventIndex] = updatedEvent;
+      return updatedEvent;
     } catch {
       throw new Error(`Can't update event (id: ${eventData.id})`);
     }

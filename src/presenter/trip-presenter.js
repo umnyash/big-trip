@@ -290,14 +290,19 @@ export default class TripPresenter {
     }
   };
 
-  #eventUpdateHandler = async (eventData) => {
+  #eventUpdateHandler = async (eventData, { isFavoriteToggle }) => {
     this.#uiBlocker.block();
     this.#eventPresenters.get(eventData.id).setSaving();
 
     try {
-      await this.#model.updateEvent(eventData);
-      this.#clear();
-      this.#render();
+      const updatedEvent = await this.#model.updateEvent(eventData);
+
+      if (isFavoriteToggle) {
+        this.#eventPresenters.get(eventData.id).init(updatedEvent);
+      } else {
+        this.#clear();
+        this.#render();
+      }
     } catch {
       this.#eventPresenters.get(eventData.id).setFailed();
     } finally {

@@ -115,7 +115,7 @@ export default class EventPresenter {
   };
 
   #formSubmitHandler = (eventData) => {
-    this.#onEventUpdate(eventData);
+    this.#onEventUpdate(eventData, { isFavoriteToggle: false });
   };
 
   #formCloseButtonClickHandler = () => {
@@ -123,10 +123,13 @@ export default class EventPresenter {
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#onEventUpdate({
-      ...this.#event,
-      isFavorite: !this.#event.isFavorite,
-    });
+    this.#onEventUpdate(
+      {
+        ...this.#event,
+        isFavorite: !this.#event.isFavorite,
+      },
+      { isFavoriteToggle: true },
+    );
   };
 
   #deleteButtonClickHandler = (eventId) => {
