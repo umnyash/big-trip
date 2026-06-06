@@ -277,6 +277,10 @@ export default class EventFormView extends AbstractStatefulView {
     document.removeEventListener('click', this.#documentClickHandler);
   }
 
+  shake(callback) {
+    super.shake(this.element.firstElementChild, callback);
+  }
+
   _getTemplate() {
     const destinationId = this.#getDestinationIdByName(this._state.destinationFieldValue);
     const destination = this.#destinations[destinationId];
@@ -333,7 +337,7 @@ export default class EventFormView extends AbstractStatefulView {
   }
 
   setFailed() {
-    this.shake(this.element.firstElementChild, () => {
+    this.shake(() => {
       this.updateElement({ formStatus: FormStatus.IDLE });
     });
   }
@@ -589,6 +593,7 @@ export default class EventFormView extends AbstractStatefulView {
         shouldValidateOnInput: true,
       });
 
+      this.shake();
       return;
     }
 
