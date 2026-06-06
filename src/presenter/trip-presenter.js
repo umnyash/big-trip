@@ -71,22 +71,22 @@ export default class TripPresenter {
 
   get #messageVariant() {
     if (this.#loadingStatus === RequestStatus.PENDING) {
-      return MessageVariant.Loading;
+      return MessageVariant.LOADING;
     }
 
     if (this.#loadingStatus === RequestStatus.ERROR) {
-      return MessageVariant.LoadFailed;
+      return MessageVariant.LOAD_FAILED;
     }
 
     switch (this.#filter) {
       case TimeStatus.PAST:
-        return MessageVariant.NoPastEvents;
+        return MessageVariant.NO_PAST_EVENTS;
       case TimeStatus.ONGOING:
-        return MessageVariant.NoOngoingEvents;
+        return MessageVariant.NO_ONGOING_EVENTS;
       case TimeStatus.UPCOMING:
-        return MessageVariant.NoUpcomingEvents;
+        return MessageVariant.NO_UPCOMING_EVENTS;
       default:
-        return MessageVariant.NoEvents;
+        return MessageVariant.NO_EVENTS;
     }
   }
 

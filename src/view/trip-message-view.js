@@ -1,21 +1,21 @@
 import { AbstractView } from '../framework';
 
 const MessageVariant = {
-  Loading: 'Loading',
-  LoadFailed: 'LoadFailed',
-  NoEvents: 'NoEvents',
-  NoPastEvents: 'NoPastEvents',
-  NoOngoingEvents: 'NoOngoingEvents',
-  NoUpcomingEvents: 'NoUpcomingEvents',
+  LOADING: 'loading',
+  LOAD_FAILED: 'load failed',
+  NO_EVENTS: 'no events',
+  NO_PAST_EVENTS: 'no past events',
+  NO_ONGOING_EVENTS: 'no ongoing events',
+  NO_UPCOMING_EVENTS: 'no upcoming events',
 };
 
 const messages = {
-  [MessageVariant.Loading]: 'Loading<span class="animated-ellipsis"><span>...</span></span>',
-  [MessageVariant.LoadFailed]: 'We couldn’t load route information.<br> Please try again later',
-  [MessageVariant.NoEvents]: 'Click New Event to create your first point',
-  [MessageVariant.NoPastEvents]: 'No past events',
-  [MessageVariant.NoOngoingEvents]: 'No ongoing events',
-  [MessageVariant.NoUpcomingEvents]: 'No upcoming events',
+  [MessageVariant.LOADING]: 'Loading<span class="animated-ellipsis"><span>...</span></span>',
+  [MessageVariant.LOAD_FAILED]: 'We couldn’t load route information.<br> Please try again later',
+  [MessageVariant.NO_EVENTS]: 'Click New Event to create your first point',
+  [MessageVariant.NO_PAST_EVENTS]: 'No past events',
+  [MessageVariant.NO_ONGOING_EVENTS]: 'No ongoing events',
+  [MessageVariant.NO_UPCOMING_EVENTS]: 'No upcoming events',
 };
 
 function createTripMessageTemplate(variant) {
