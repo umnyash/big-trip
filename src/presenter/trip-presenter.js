@@ -16,8 +16,8 @@ import AddEventButtonView from '../view/add-event-button-view.js';
 import EventListView from '../view/event-list-view.js';
 import TripFilterView from '../view/trip-filter-view.js';
 import TripSortView from '../view/trip-sort-view.js';
-import TripSummary from '../view/trip-summary-view.js';
-import TripMessage, { MessageVariant } from '../view/trip-message-view.js';
+import TripSummaryView from '../view/trip-summary-view.js';
+import TripMessageView, { MessageVariant } from '../view/trip-message-view.js';
 
 export default class TripPresenter {
   #headerElement = null;
@@ -105,7 +105,7 @@ export default class TripPresenter {
   }
 
   #renderSummary() {
-    this.#summaryComponent = new TripSummary({
+    this.#summaryComponent = new TripSummaryView({
       route: extractTripRoute(this.#allEvents, this.#destinations),
       dates: getTripDates(this.#allEvents),
       price: calcTripPrice(this.#allEvents, this.#offers),
@@ -133,7 +133,7 @@ export default class TripPresenter {
   }
 
   #renderMessage() {
-    this.#messageComponent = new TripMessage({ variant: this.#messageVariant });
+    this.#messageComponent = new TripMessageView({ variant: this.#messageVariant });
     render(this.#messageComponent, this.#headerElement, RenderPosition.AFTEREND);
   }
 

@@ -22,7 +22,7 @@ function createTripMessageTemplate(variant) {
   return `<p class="trip__message">${messages[variant]}</p>`;
 }
 
-export default class TripMessage extends AbstractView {
+export default class TripMessageView extends AbstractView {
   #variant = null;
 
   constructor({ variant }) {

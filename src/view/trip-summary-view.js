@@ -28,7 +28,7 @@ function createTripSummaryTemplate({ route, dates, price }) {
   );
 }
 
-export default class TripSummary extends AbstractView {
+export default class TripSummaryView extends AbstractView {
   #route = null;
   #dates = null;
   #price = null;
